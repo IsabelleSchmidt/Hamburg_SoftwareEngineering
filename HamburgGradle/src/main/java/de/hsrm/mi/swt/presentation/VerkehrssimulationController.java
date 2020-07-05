@@ -8,210 +8,439 @@ import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class VerkehrssimulationController implements Initializable{
 	
-	double mainSceneX, mainSceneY;
-   
 	@FXML
-    private AnchorPane simulationPane;
+	private AnchorPane loadSimulationPane;
 
-    @FXML
-    private Text showInfoLabelOne;
+	@FXML
+	private Button loadiSimulationButton;
 
-    @FXML
-    private Text showInfoLabelTwo;
+	@FXML
+	private Button loadSimulationBackToMenu;
 
-    @FXML
-    private Text showInfoLabelThree;
+	@FXML
+	private AnchorPane menuPane;
 
-    @FXML
-    private Button controllButtonStart;
+	@FXML
+	private Button menuNewSimulationButton;
 
-    @FXML
-    private Button controllButtonPause;
+	@FXML
+	private Button menuLoadSimulationButton;
 
-    @FXML
-    private Button controllButtonStop;
+	@FXML
+	private Button quitSimulationButton;
 
-    @FXML
-    private Button controllButtonIncrease;
+	@FXML
+	private AnchorPane simulationPane;
 
-    @FXML
-    private Button controllButtonDrecease;
+	@FXML
+	private ImageView ImageGrid_0_0;
 
-    @FXML
-    private Button toolbarButtonRight;
+	@FXML
+	private ImageView ImageGrid_0_1;
 
-    @FXML
-    private Button toolbarButtonLeft;
+	@FXML
+	private ImageView ImageGrid_0_2;
 
-    @FXML
-    private Button toolbarButtonDown;
+	@FXML
+	private ImageView ImageGrid_0_3;
 
-    @FXML
-    private Button toolbarButtonRotateLeft;
+	@FXML
+	private ImageView ImageGrid_0_4;
 
-    @FXML
-    private Button toolbarButtonRotateRight;
+	@FXML
+	private ImageView ImageGrid_1_0;
 
-    @FXML
-    private Button toolbarButtonUp;
+	@FXML
+	private ImageView ImageGrid_1_1;
 
-    @FXML
-    private Button toolbarButtonDelete;
+	@FXML
+	private ImageView ImageGrid_1_2;
 
-    @FXML
-    private ImageView StreetElementStraight;
+	@FXML
+	private ImageView ImageGrid_1_3;
 
-    @FXML
-    private ImageView StreetElementCurve;
+	@FXML
+	private ImageView ImageGrid_1_4;
 
-    @FXML
-    private ImageView StreetElementCrossing;
+	@FXML
+	private ImageView ImageGrid_2_0;
 
-    @FXML
-    private ImageView StreetElementJunction;
+	@FXML
+	private ImageView ImageGrid_2_1;
 
-    @FXML
-    private ImageView StreetElementCar;
+	@FXML
+	private ImageView ImageGrid_2_2;
 
-    @FXML
-    private ImageView StreetElementTrafficLight;
+	@FXML
+	private ImageView ImageGrid_2_3;
 
-    @FXML
-    private Button functionButtonSafe;
+	@FXML
+	private ImageView ImageGrid_2_4;
 
-    @FXML
-    private Button functioButtonLoad;
+	@FXML
+	private ImageView ImageGrid_3_0;
 
-    @FXML
-    private Button functionButtonMenuBack;
+	@FXML
+	private ImageView ImageGrid_3_1;
 
-    @FXML
-    private Button functionButtonQuit;
+	@FXML
+	private ImageView ImageGrid_3_2;
 
-    @FXML
-    private AnchorPane loadSimulationPane;
+	@FXML
+	private ImageView ImageGrid_3_3;
 
-    @FXML
-    private Button loadiSimulationButton;
+	@FXML
+	private ImageView ImageGrid_3_4;
 
-    @FXML
-    private Button loadSimulationBackToMenu;
+	@FXML
+	private ImageView ImageGrid_4_0;
 
-    @FXML
-    private AnchorPane menuPane;
+	@FXML
+	private ImageView ImageGrid_4_1;
 
-    @FXML
-    private Button menuNewSimulationButton;
+	@FXML
+	private ImageView ImageGrid_4_2;
 
-    @FXML
-    private Button menuLoadSimulationButton;
+	@FXML
+	private ImageView ImageGrid_4_3;
 
-    @FXML
-    private Button quitSimulationButton;
+	@FXML
+	private ImageView ImageGrid_4_4;
 
-    @FXML
-    void backToMenu(ActionEvent event) {
-    	scrollToMenu();
-    }
+	@FXML
+	private Text showInfoLabelOne;
 
-    @FXML
-    void endSimulation(ActionEvent event) {
+	@FXML
+	private Text showInfoLabelTwo;
 
-    }
+	@FXML
+	private Text showInfoLabelThree;
 
-    @FXML
-    void increaseSpeed(ActionEvent event) {
+	@FXML
+	private Button controllButtonStart;
 
-    }
+	@FXML
+	private Button controllButtonPause;
 
-    @FXML
-    void loadSimulation(ActionEvent event) {
-    	scrollToloadSimulation();
-    }
+	@FXML
+	private Button controllButtonStop;
 
-    @FXML
-    void newSimulation(ActionEvent event) {
-    	scrollToSimulation();
-    }
+	@FXML
+	private Button controllButtonIncrease;
 
-    @FXML
-    void pauseSimulation(ActionEvent event) {
+	@FXML
+	private Button controllButtonDrecease;
 
-    }
+	@FXML
+	private Button toolbarButtonRight;
 
-    @FXML
-    void placeDown(ActionEvent event) {
+	@FXML
+	private Button toolbarButtonLeft;
 
-    }
+	@FXML
+	private Button toolbarButtonDown;
 
-    @FXML
-    void placeLeft(ActionEvent event) {
+	@FXML
+	private Button toolbarButtonRotateLeft;
 
-    }
+	@FXML
+	private Button toolbarButtonRotateRight;
 
-    @FXML
-    void placeRight(ActionEvent event) {
+	@FXML
+	private Button toolbarButtonUp;
 
-    }
+	@FXML
+	private Button toolbarButtonDelete;
 
-    @FXML
-    void placeUp(ActionEvent event) {
+	@FXML
+	private ImageView StreetElementStraight;
 
-    }
+	@FXML
+	private ImageView StreetElementCurve;
 
-    @FXML
-    void quitSimulation(ActionEvent event) {
-    	System.exit(0);
-    }
+	@FXML
+	private ImageView StreetElementCrossing;
 
-    @FXML
-    void quitSiumulation(ActionEvent event) {
-    	System.exit(0);
-    }
+	@FXML
+	private ImageView StreetElementJunction;
 
-    @FXML
-    void remove(ActionEvent event) {
+	@FXML
+	private ImageView StreetElementCar;
 
-    }
+	@FXML
+	private ImageView StreetElementTrafficLight;
 
-    @FXML
-    void rotateLeft(ActionEvent event) {
+	@FXML
+	private Button functionButtonSafe;
 
-    }
+	@FXML
+	private Button functioButtonLoad;
 
-    @FXML
-    void rotateRight(ActionEvent event) {
+	@FXML
+	private Button functionButtonMenuBack;
 
-    }
+	@FXML
+	private Button functionButtonQuit;
 
-    @FXML
-    void safeSimulation(ActionEvent event) {
+	@FXML
+	void getGridPosition(MouseEvent event) {
 
-    }
+		// ImageView img = (ImageView) event.getTarget();
 
-    @FXML
-    void showProcets(ActionEvent event) {
+		// Data dropped
+		// If there is an image on the dragboard, read it and use it
+		// Dragboard db = event.getDragboard();
 
-    }
+		// target.setText(db.getImage()); --- must be changed to target.add(source, col,
+		// row)
+		// target.add(source, 5, 5, 1, 1);
+		// Places at 0,0 - will need to take coordinates once that is implemented
+//			ImageView image = new ImageView(db.getImage());
 
-    @FXML
-    void startSimulation(ActionEvent event) {
+		// TODO: set image size; use correct column/row span
+//			Board.add(image, x, y, 1, 1);
+//			success = true;
 
-    }
-    
-    
-   public void scrollToMenu(){
+		// let the source know whether the image was successfully transferred and used
+
+		event.consume();
+
+	}
+
+	@FXML
+	void handleDragDetection(MouseEvent event) {
+
+		ImageView picked = (ImageView) event.getPickResult().getIntersectedNode();
+
+		Dragboard db = picked.startDragAndDrop(TransferMode.ANY);
+		ClipboardContent cb = new ClipboardContent();
+
+		cb.putImage(picked.getImage());
+		db.setContent(cb);
+
+		event.consume();
+
+	}
+
+	@FXML
+	void handleImageDragOver(DragEvent event) {
+		if (event.getDragboard().hasImage()) {
+			event.acceptTransferModes(TransferMode.ANY);
+		}
+	}
+
+	@FXML
+	void handleImageDrop(DragEvent event) {
+
+		Node node = event.getPickResult().getIntersectedNode();
+
+		Integer cIndex = GridPane.getColumnIndex(node);
+		Integer rIndex = GridPane.getRowIndex(node);
+		int x = cIndex == null ? 0 : cIndex;
+		int y = rIndex == null ? 0 : rIndex;
+
+		System.out.println(x + " " + y);
+
+		Image img = event.getDragboard().getImage();
+
+		String buildImageString = "ImageGrid_" + x + "_" + y;
+
+		System.out.println(buildImageString);
+
+		// TODO: Bin schon müde und komme nicht mehr drauf, switch case ist kacke.
+		// Vorallem wenn es mehr Felder werden sollen. Man muss die ImageView irgendwie
+		// bauen können
+
+		switch (buildImageString) {
+		case "ImageGrid_0_0":
+			ImageGrid_0_0.setImage(img);
+			break;
+		case "ImageGrid_0_1":
+			ImageGrid_0_1.setImage(img);
+			break;
+		case "ImageGrid_0_2":
+			ImageGrid_0_2.setImage(img);
+			break;
+		case "ImageGrid_0_3":
+			ImageGrid_0_3.setImage(img);
+			break;
+		case "ImageGrid_0_4":
+			ImageGrid_0_4.setImage(img);
+			break;
+		case "ImageGrid_1_0":
+			ImageGrid_1_0.setImage(img);
+			break;
+		case "ImageGrid_1_1":
+			ImageGrid_1_1.setImage(img);
+			break;
+		case "ImageGrid_1_2":
+			ImageGrid_1_2.setImage(img);
+			break;
+		case "ImageGrid_1_3":
+			ImageGrid_1_3.setImage(img);
+			break;
+		case "ImageGrid_1_4":
+			ImageGrid_1_4.setImage(img);
+			break;
+		case "ImageGrid_2_0":
+			ImageGrid_2_0.setImage(img);
+			break;
+		case "ImageGrid_2_1":
+			ImageGrid_2_1.setImage(img);
+			break;
+		case "ImageGrid_2_2":
+			ImageGrid_2_2.setImage(img);
+			break;
+		case "ImageGrid_2_3":
+			ImageGrid_2_3.setImage(img);
+			break;
+		case "ImageGrid_2_4":
+			ImageGrid_2_4.setImage(img);
+			break;
+		case "ImageGrid_3_0":
+			ImageGrid_3_0.setImage(img);
+			break;
+		case "ImageGrid_3_1":
+			ImageGrid_3_1.setImage(img);
+			break;
+		case "ImageGrid_3_2":
+			ImageGrid_3_2.setImage(img);
+			break;
+		case "ImageGrid_3_3":
+			ImageGrid_3_3.setImage(img);
+			break;
+		case "ImageGrid_3_4":
+			ImageGrid_3_4.setImage(img);
+			break;
+		case "ImageGrid_4_0":
+			ImageGrid_4_0.setImage(img);
+			break;
+		case "ImageGrid_4_1":
+			ImageGrid_4_1.setImage(img);
+			break;
+		case "ImageGrid_4_2":
+			ImageGrid_4_2.setImage(img);
+			break;
+		case "ImageGrid_4_3":
+			ImageGrid_4_3.setImage(img);
+			break;
+		case "ImageGrid_4_4":
+			ImageGrid_4_4.setImage(img);
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
+	@FXML
+	void backToMenu(ActionEvent event) {
+		scrollToMenu();
+	}
+
+	@FXML
+	void endSimulation(ActionEvent event) {
+
+	}
+
+	@FXML
+	void increaseSpeed(ActionEvent event) {
+
+	}
+
+	@FXML
+	void loadSimulation(ActionEvent event) {
+		scrollToloadSimulation();
+	}
+
+	@FXML
+	void newSimulation(ActionEvent event) {
+		scrollToSimulation();
+	}
+
+	@FXML
+	void pauseSimulation(ActionEvent event) {
+
+	}
+
+	@FXML
+	void placeDown(ActionEvent event) {
+
+	}
+
+	@FXML
+	void placeLeft(ActionEvent event) {
+
+	}
+
+	@FXML
+	void placeRight(ActionEvent event) {
+
+	}
+
+	@FXML
+	void placeUp(ActionEvent event) {
+
+	}
+
+	@FXML
+	void quitSimulation(ActionEvent event) {
+		System.exit(0);
+	}
+
+	@FXML
+	void quitSiumulation(ActionEvent event) {
+		System.exit(0);
+	}
+
+	@FXML
+	void remove(ActionEvent event) {
+
+	}
+
+	@FXML
+	void rotateLeft(ActionEvent event) {
+
+	}
+
+	@FXML
+	void rotateRight(ActionEvent event) {
+
+	}
+
+	@FXML
+	void safeSimulation(ActionEvent event) {
+
+	}
+
+	@FXML
+	void showProcets(ActionEvent event) {
+
+	}
+
+	@FXML
+	void startSimulation(ActionEvent event) {
+
+	}
+
+	public void scrollToMenu() {
 		TranslateTransition tr1 = new TranslateTransition();
 		tr1.setDuration(Duration.millis(300));
 		tr1.setToX(0);
@@ -231,9 +460,9 @@ public class VerkehrssimulationController implements Initializable{
 		tr2.setNode(menuPane);
 		ParallelTransition pt = new ParallelTransition(tr1, tr2, tr3);
 		pt.play();
-    }
-   
-   public void scrollToloadSimulation() {
+	}
+
+	public void scrollToloadSimulation() {
 		TranslateTransition tr1 = new TranslateTransition();
 		tr1.setDuration(Duration.millis(300));
 		tr1.setToX(0);
@@ -253,9 +482,9 @@ public class VerkehrssimulationController implements Initializable{
 		tr2.setNode(loadSimulationPane);
 		ParallelTransition pt = new ParallelTransition(tr1, tr2, tr3);
 		pt.play();
-   }
-   
-   public void scrollToSimulation() {
+	}
+
+	public void scrollToSimulation() {
 		TranslateTransition tr1 = new TranslateTransition();
 		tr1.setDuration(Duration.millis(300));
 		tr1.setToX(0);
@@ -275,50 +504,11 @@ public class VerkehrssimulationController implements Initializable{
 		tr2.setNode(simulationPane);
 		ParallelTransition pt = new ParallelTransition(tr1, tr2, tr3);
 		pt.play();
-   }
-   
-   public void moveStreet(ImageView imgView) {
-	   imgView.setCursor(Cursor.HAND);
-		imgView.setOnMousePressed((t) -> {
-			mainSceneX = t.getSceneX();
-			mainSceneY = t.getSceneY();
-		});
-		imgView.setOnMouseDragged((t) -> {
-			double offsetX = t.getSceneX() - mainSceneX;
-			double offsetY = t.getSceneY() - mainSceneY;
-
-			ImageView r = (ImageView) (t.getSource());
-
-			r.setX(r.getX() + offsetX);
-			r.setY(r.getY() + offsetY);
-
-			mainSceneX = t.getSceneX();
-			mainSceneY = t.getSceneY();
-		});
-   }
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		StreetElementStraight.setCursor(Cursor.HAND);
-		StreetElementStraight.setOnMousePressed((t) -> {
-			mainSceneX = t.getSceneX();
-			mainSceneY = t.getSceneY();
-		});
-		StreetElementStraight.setOnMouseDragged((t) -> {
-			double offsetX = t.getSceneX() - mainSceneX;
-			double offsetY = t.getSceneY() - mainSceneY;
 
-			ImageView r = (ImageView) (t.getSource());
-
-			r.setX(r.getX() + offsetX);
-			r.setY(r.getY() + offsetY);
-
-			mainSceneX = t.getSceneX();
-			mainSceneY = t.getSceneY();
-			
-		});
-		
-		
 	}
 
 }
