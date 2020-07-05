@@ -1,5 +1,11 @@
 package business.components;
 
+/**
+ * 
+ * extended Street, weil die Ampel teil der Straße ist. Quasi nur eine besondere
+ * Art von Straße
+ *
+ */
 public class Trafficlight extends Street {
 	private int positionX;
 	private int positionY;

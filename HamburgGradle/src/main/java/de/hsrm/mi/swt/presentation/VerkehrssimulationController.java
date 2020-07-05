@@ -1,19 +1,26 @@
 package de.hsrm.mi.swt.presentation;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.sun.glass.ui.Clipboard;
 
+import javafx.animation.AnimationTimer;
 import javafx.animation.ParallelTransition;
+import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -23,11 +30,15 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -35,7 +46,12 @@ public class VerkehrssimulationController implements Initializable {
 
 	MenuItem rightClickMenu;
 	ContextMenu contextMenu;
-	int sum;
+
+	private static final double W = 600, H = 400;
+	private FileInputStream inputstream;
+	private Node car;
+
+	boolean running, goNorth, goSouth, goEast, goWest;
 
 	@FXML
 	private AnchorPane loadSimulationPane;
@@ -60,6 +76,9 @@ public class VerkehrssimulationController implements Initializable {
 
 	@FXML
 	private AnchorPane simulationPane;
+
+	@FXML
+	private AnchorPane simulationGrid;
 
 	@FXML
 	private ImageView ImageGrid_0_0;
@@ -161,27 +180,6 @@ public class VerkehrssimulationController implements Initializable {
 	private Button controllButtonDrecease;
 
 	@FXML
-	private Button toolbarButtonRight;
-
-	@FXML
-	private Button toolbarButtonLeft;
-
-	@FXML
-	private Button toolbarButtonDown;
-
-	@FXML
-	private Button toolbarButtonRotateLeft;
-
-	@FXML
-	private Button toolbarButtonRotateRight;
-
-	@FXML
-	private Button toolbarButtonUp;
-
-	@FXML
-	private Button toolbarButtonDelete;
-
-	@FXML
 	private ImageView StreetElementStraight;
 
 	@FXML
@@ -214,26 +212,6 @@ public class VerkehrssimulationController implements Initializable {
 	@FXML
 	void getGridPosition(MouseEvent event) {
 
-		// ImageView img = (ImageView) event.getTarget();
-
-		// Data dropped
-		// If there is an image on the dragboard, read it and use it
-		// Dragboard db = event.getDragboard();
-
-		// target.setText(db.getImage()); --- must be changed to target.add(source, col,
-		// row)
-		// target.add(source, 5, 5, 1, 1);
-		// Places at 0,0 - will need to take coordinates once that is implemented
-//			ImageView image = new ImageView(db.getImage());
-
-		// TODO: set image size; use correct column/row span
-//			Board.add(image, x, y, 1, 1);
-//			success = true;
-
-		// let the source know whether the image was successfully transferred and used
-
-		event.consume();
-
 	}
 
 	@FXML
@@ -264,8 +242,9 @@ public class VerkehrssimulationController implements Initializable {
 		Node node = event.getPickResult().getIntersectedNode();
 
 		if (event.getButton() == MouseButton.PRIMARY) {
-			int counter = event.getClickCount(); //TODO: Clicks müssen schnell hintereinander erfolgen, sonst keine Roation
-			node.setRotate(90 * counter); 
+			int counter = event.getClickCount(); // TODO: Clicks müssen schnell hintereinander erfolgen, sonst keine
+													// Roation
+			node.setRotate(90 * counter);
 			counter = 0;
 		}
 
@@ -283,6 +262,13 @@ public class VerkehrssimulationController implements Initializable {
 		int y = rIndex == null ? 0 : rIndex;
 
 		// System.out.println(x + " " + y);
+
+	}
+
+	@FXML
+	void carControls(KeyEvent event) {
+
+		System.out.println(event.getCharacter());
 
 	}
 
@@ -479,6 +465,39 @@ public class VerkehrssimulationController implements Initializable {
 	@FXML
 	void startSimulation(ActionEvent event) {
 
+		try {
+			inputstream = new FileInputStream("smallcar.png");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		Image image = new Image(inputstream);
+		car = new ImageView(image);
+		simulationGrid.getChildren().add(car);
+		
+		Group group = new Group();
+		Path path = new Path();
+
+		path.getElements().add(new MoveTo(20, 20));
+		path.getElements().add(new CubicCurveTo(30, 30, 30, 100, 500,100));
+		path.getElements().add(new CubicCurveTo(200, 500, 110, 240, 10, 240));
+		path.setOpacity(0.1);
+
+		group.getChildren().add(path);
+		group.getChildren().add(car);
+		simulationGrid.getChildren().add(group);
+
+		PathTransition pathTransition = new PathTransition();
+
+		pathTransition.setDuration(Duration.seconds(8.0));
+		pathTransition.setDelay(Duration.seconds(.5));
+		pathTransition.setPath(path);
+		pathTransition.setNode(car);
+		pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+		pathTransition.setCycleCount(Timeline.INDEFINITE);
+		pathTransition.setAutoReverse(true);
+		pathTransition.play();
+
 	}
 
 	public void scrollToMenu() {
@@ -554,20 +573,6 @@ public class VerkehrssimulationController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
-		
-
-//		rightClickMenu.setOnAction(new EventHandler<ActionEvent>() {
-//
-//			@Override
-//			public void handle(ActionEvent event) {
-//
-//				// Node node = event.getPickResult().getIntersectedNode();
-//				ImageView node = (ImageView) event.getTarget();
-//				node.setImage(null);
-//
-//			}
-//		});
 
 	}
 
