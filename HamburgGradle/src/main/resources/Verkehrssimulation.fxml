@@ -248,29 +248,29 @@
                                        <children>
                                           <ImageView fx:id="StreetElementStraight" fitHeight="50.0" fitWidth="50.0" onDragDetected="#handleDragDetection" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                              <image>
-                                                <Image url="@../../../../../../Desktop/Exporte/gerade.png" />
+                                                <Image url="@gerade.png" />
                                              </image></ImageView>
                                           <ImageView fx:id="StreetElementCurve" fitHeight="50.0" fitWidth="50.0" onDragDetected="#handleDragDetection" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                              <image>
-                                                <Image url="@../../../../../../Desktop/Exporte/kurve.png" />
+                                                <Image url="@kurve.png" />
                                              </image></ImageView>
                                           <ImageView fx:id="StreetElementCrossing" fitHeight="50.0" fitWidth="50.0" onDragDetected="#handleDragDetection" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                              <image>
-                                                <Image url="@../../../../../../Desktop/Exporte/kreuzung.png" />
+                                                <Image url="@kreuzung.png" />
                                              </image>
                                           </ImageView>
                                           <ImageView fx:id="StreetElementJunction" fitHeight="50.0" fitWidth="50.0" onDragDetected="#handleDragDetection" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                              <image>
-                                                <Image url="@../../../../../../Desktop/Exporte/abzweigung.png" />
+                                                <Image url="@abzweigung.png" />
                                              </image>
                                           </ImageView>
                                           <ImageView fx:id="StreetElementCar" fitHeight="50.0" fitWidth="50.0" onDragDetected="#handleDragDetection" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                              <image>
-                                                <Image url="@../../../../../../Desktop/Exporte/auto_rosa.png" />
+                                                <Image url="@auto_rosa.png" />
                                              </image></ImageView>
                                           <ImageView fx:id="StreetElementTrafficLight" fitHeight="50.0" fitWidth="50.0" onDragDetected="#handleDragDetection" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                              <image>
-                                                <Image url="@../../../../../../Desktop/Exporte/ampel_transparent.png" />
+                                                <Image url="@ampel_transparent.png" />
                                              </image>
                                           </ImageView>
                                        </children>
