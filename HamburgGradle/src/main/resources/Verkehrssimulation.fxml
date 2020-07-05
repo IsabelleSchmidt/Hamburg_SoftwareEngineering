@@ -264,10 +264,13 @@
                                                 <Image url="@abzweigung.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fx:id="StreetElementCar" fitHeight="50.0" fitWidth="50.0" onDragDetected="#handleDragDetection" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                          <ImageView fx:id="StreetElementCar" fitHeight="50.0" fitWidth="50.0" onDragDetected="#handleDragDetection" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                             <image>
+                                                <Image url="@auto_rosa.png" />
+                                             </image></ImageView>
                                           <ImageView fx:id="StreetElementTrafficLight" fitHeight="50.0" fitWidth="50.0" onDragDetected="#handleDragDetection" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                              <image>
-                                                <Image url="@ampel.png" />
+                                                <Image url="@ampel_transparent.png" />
                                              </image>
                                           </ImageView>
                                        </children>
