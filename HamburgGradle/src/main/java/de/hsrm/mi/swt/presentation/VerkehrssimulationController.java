@@ -51,8 +51,6 @@ public class VerkehrssimulationController implements Initializable {
 	private FileInputStream inputstream;
 	private Node car;
 
-	boolean running, goNorth, goSouth, goEast, goWest;
-
 	@FXML
 	private AnchorPane loadSimulationPane;
 
@@ -238,6 +236,11 @@ public class VerkehrssimulationController implements Initializable {
 
 	@FXML
 	void onMouseClickedGrid(MouseEvent event) {
+		
+		double doubleX = event.getSceneX();
+		double doubleY = event.getSceneY();
+
+		System.out.println(doubleY + " " + doubleX);
 
 		Node node = event.getPickResult().getIntersectedNode();
 
@@ -273,9 +276,19 @@ public class VerkehrssimulationController implements Initializable {
 	}
 
 	@FXML
+	void handleCarDragDetection(MouseEvent event) {
+
+	}
+
+	@FXML
 	void handleImageDrop(DragEvent event) {
 
 		Node node = event.getPickResult().getIntersectedNode();
+
+		double doubleX = event.getScreenY();
+		double doubleY = event.getSceneY();
+
+		System.out.println(doubleY + " " + doubleX);
 
 		Integer cIndex = GridPane.getColumnIndex(node);
 		Integer rIndex = GridPane.getRowIndex(node);
@@ -286,15 +299,11 @@ public class VerkehrssimulationController implements Initializable {
 
 		Image img = event.getDragboard().getImage();
 
-		String buildImageString = "ImageGrid_" + x + "_" + y;
-
-		System.out.println(buildImageString);
-
 		// TODO: Bin schon müde und komme nicht mehr drauf, switch case ist kacke.
-		// Vorallem wenn es mehr Felder werden sollen. Man muss die ImageView irgendwie
-		// bauen können
+		// Vorallem wenn es mehr Felder werden sollen. Man muss das ImageGrid_x_x
+		// irgendwie bauen können
 
-		switch (buildImageString) {
+		switch (event.getPickResult().getIntersectedNode().getId()) {
 		case "ImageGrid_0_0":
 			ImageGrid_0_0.setImage(img);
 			break;
@@ -474,29 +483,31 @@ public class VerkehrssimulationController implements Initializable {
 		Image image = new Image(inputstream);
 		car = new ImageView(image);
 		simulationGrid.getChildren().add(car);
-		
-		Group group = new Group();
-		Path path = new Path();
 
-		path.getElements().add(new MoveTo(20, 20));
-		path.getElements().add(new CubicCurveTo(30, 30, 30, 100, 500,100));
-		path.getElements().add(new CubicCurveTo(200, 500, 110, 240, 10, 240));
-		path.setOpacity(0.1);
+//		event.getScreenX(), event.getScreenY()
 
-		group.getChildren().add(path);
-		group.getChildren().add(car);
-		simulationGrid.getChildren().add(group);
+//		Group group = new Group();
+//		Path path = new Path();
 
-		PathTransition pathTransition = new PathTransition();
-
-		pathTransition.setDuration(Duration.seconds(8.0));
-		pathTransition.setDelay(Duration.seconds(.5));
-		pathTransition.setPath(path);
-		pathTransition.setNode(car);
-		pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-		pathTransition.setCycleCount(Timeline.INDEFINITE);
-		pathTransition.setAutoReverse(true);
-		pathTransition.play();
+//		path.getElements().add(new MoveTo(20, 20));
+//		path.getElements().add(new CubicCurveTo(30, 30, 30, 100, 500,100));
+//		path.getElements().add(new CubicCurveTo(200, 500, 110, 240, 10, 240));
+//		path.setOpacity(0.1);
+//
+//		group.getChildren().add(path);
+//		group.getChildren().add(car);
+//		simulationGrid.getChildren().add(group);
+//
+//		PathTransition pathTransition = new PathTransition();
+//
+//		pathTransition.setDuration(Duration.seconds(8.0));
+//		pathTransition.setDelay(Duration.seconds(.5));
+//		pathTransition.setPath(path);
+//		pathTransition.setNode(car);
+//		pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+//		pathTransition.setCycleCount(Timeline.INDEFINITE);
+//		pathTransition.setAutoReverse(true);
+//		pathTransition.play();
 
 	}
 

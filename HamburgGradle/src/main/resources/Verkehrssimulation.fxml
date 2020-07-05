@@ -257,7 +257,7 @@
                                                 <Image url="@abzweigung.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fx:id="StreetElementCar" fitHeight="50.0" fitWidth="50.0" onDragDetected="#handleDragDetection" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                          <ImageView fx:id="StreetElementCar" fitHeight="50.0" fitWidth="50.0" onDragDetected="#handleCarDragDetection" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                              <image>
                                                 <Image url="@auto_rosa.png" />
                                              </image></ImageView>
