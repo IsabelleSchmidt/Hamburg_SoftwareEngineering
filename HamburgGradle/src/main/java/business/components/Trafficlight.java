@@ -1,6 +1,6 @@
 package business.components;
 
-public class Trafficlight {
+public class Trafficlight extends Street {
 	private int positionX;
 	private int positionY;
 	private int alignment;
