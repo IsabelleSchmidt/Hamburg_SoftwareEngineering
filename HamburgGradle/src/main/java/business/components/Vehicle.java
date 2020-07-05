@@ -2,18 +2,15 @@ package business.components;
 
 import javafx.animation.AnimationTimer;
 
-public class Vehicle {
+public class Vehicle extends Item{
 
-	int positionX;
-	int positionY;
-	int alignment;
 
 	double width;
 	double length;
 	
 	boolean running;
 	
-	String color;
+	private Color color;
 	
 	AnimationTimer timer;
 	
@@ -31,7 +28,10 @@ public class Vehicle {
 		
 	}
 	
-	public Vehicle() {		
+	public Vehicle(int positionX, int positionY, int alignment, Color color) {		
+		super(positionX, positionY, alignment);
+		this.color = color;
+	
 	}
 	
 	private void remove() {
@@ -43,5 +43,8 @@ public class Vehicle {
 		while(running = true) {
 			
 		}
+	}
+	public Color getColor() {
+		return color;
 	}
 }

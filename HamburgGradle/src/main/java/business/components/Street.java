@@ -1,30 +1,22 @@
 package business.components;
 
-public class Street {
+public class Street extends Item{
 
-	private int positionX;
-    private int positionY;
-    private int alignment;
+	private StreetType type;
 
-
-    public Street(){
-
+    public Street(StreetType type,int positionX, int positionY, int alignment){
+    	super(positionX, positionY, alignment);
+    	this.type = type;
+    }
+    public Street(int positionX, int positionY, int alignment){
+    	super(positionX, positionY, alignment);
+    	
     }
 
-
-//    public void placeUp(){
-//
-//    }
-//    public void placeDown(){
-//
-//    }
-//    public void placeLeft(){
-//
-//    }
-//    public void placeRight(){
-//
-//    }
     public void remove(){
 
     }
+    public StreetType getType() {
+		return type;
+	}
 }

@@ -7,31 +7,17 @@ package business.components;
  *
  */
 public class Trafficlight extends Street {
-	private int positionX;
-	private int positionY;
-	private int alignment;
+	
 	private String status;
 	private int duration;
 
-	public Trafficlight() {
-
+	public Trafficlight(int positionX, int positionY, int alignment, String status, int duration) {
+		super(positionX, positionY, alignment);
+		this.status = status;
+		this.duration = duration;
 	}
 
-	public void placeUp() {
-
-	}
-
-	public void placeDown() {
-
-	}
-
-	public void placeLeft() {
-
-	}
-
-	public void placeRight() {
-
-	}
+	
 
 	public void remove() {
 
