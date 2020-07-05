@@ -1,20 +1,29 @@
 package de.hsrm.mi.swt.presentation;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import com.sun.glass.ui.Clipboard;
 
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
@@ -22,8 +31,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-public class VerkehrssimulationController implements Initializable{
-	
+public class VerkehrssimulationController implements Initializable {
+
+	MenuItem rightClickMenu;
+	ContextMenu contextMenu;
+	int sum;
+
 	@FXML
 	private AnchorPane loadSimulationPane;
 
@@ -246,6 +259,34 @@ public class VerkehrssimulationController implements Initializable{
 	}
 
 	@FXML
+	void onMouseClickedGrid(MouseEvent event) {
+
+		Node node = event.getPickResult().getIntersectedNode();
+
+		if (event.getButton() == MouseButton.PRIMARY) {
+			int counter = event.getClickCount(); //TODO: Clicks müssen schnell hintereinander erfolgen, sonst keine Roation
+			node.setRotate(90 * counter); 
+			counter = 0;
+		}
+
+		if (event.getButton() == MouseButton.SECONDARY) {
+			ImageView img = (ImageView) node;
+			img.setImage(null);
+//			contextMenu.getItems().addAll(rightClickMenu);
+//			contextMenu.show(node, event.getScreenX(), event.getScreenY());
+
+		}
+
+		Integer cIndex = GridPane.getColumnIndex(node);
+		Integer rIndex = GridPane.getRowIndex(node);
+		int x = cIndex == null ? 0 : cIndex;
+		int y = rIndex == null ? 0 : rIndex;
+
+		// System.out.println(x + " " + y);
+
+	}
+
+	@FXML
 	void handleImageDrop(DragEvent event) {
 
 		Node node = event.getPickResult().getIntersectedNode();
@@ -263,9 +304,9 @@ public class VerkehrssimulationController implements Initializable{
 
 		System.out.println(buildImageString);
 
-		// TODO: Bin schon m�de und komme nicht mehr drauf, switch case ist kacke.
+		// TODO: Bin schon müde und komme nicht mehr drauf, switch case ist kacke.
 		// Vorallem wenn es mehr Felder werden sollen. Man muss die ImageView irgendwie
-		// bauen k�nnen
+		// bauen können
 
 		switch (buildImageString) {
 		case "ImageGrid_0_0":
@@ -506,8 +547,27 @@ public class VerkehrssimulationController implements Initializable{
 		pt.play();
 	}
 
+	public VerkehrssimulationController() {
+		rightClickMenu = new MenuItem("Element löschen");
+		contextMenu = new ContextMenu();
+	}
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		
+		
+
+//		rightClickMenu.setOnAction(new EventHandler<ActionEvent>() {
+//
+//			@Override
+//			public void handle(ActionEvent event) {
+//
+//				// Node node = event.getPickResult().getIntersectedNode();
+//				ImageView node = (ImageView) event.getTarget();
+//				node.setImage(null);
+//
+//			}
+//		});
 
 	}
 
