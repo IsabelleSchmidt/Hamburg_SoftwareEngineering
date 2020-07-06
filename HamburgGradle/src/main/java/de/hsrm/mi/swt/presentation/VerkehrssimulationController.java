@@ -10,11 +10,13 @@ import com.sun.glass.ui.Clipboard;
 
 import business.components.Item;
 import business.simulation.Grid;
+import business.simulation.Simulation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -50,7 +52,7 @@ public class VerkehrssimulationController implements Initializable {
 
 	MenuItem rightClickMenu;
 	ContextMenu contextMenu;
-	Grid aktGrid;
+	Simulation simulation;
 	String name;
 	
 	
@@ -269,8 +271,21 @@ public class VerkehrssimulationController implements Initializable {
 		}
 
 		if (event.getButton() == MouseButton.SECONDARY) {
+			
+
+			Integer cIndex = GridPane.getColumnIndex(node);
+			Integer rIndex = GridPane.getRowIndex(node);
+			int x = cIndex == null ? 0 : cIndex;
+			int y = rIndex == null ? 0 : rIndex;
+			
 			ImageView img = (ImageView) node;
 			img.setImage(null);
+			
+			simulation.grid.xPos.set(x);
+			simulation.grid.yPos.set(y);
+			simulation.grid.removeItem();
+			
+			System.out.println("werteeee:" + x + "," + y);
 		
 //			contextMenu.getItems().addAll(rightClickMenu);
 //			contextMenu.show(node, event.getScreenX(), event.getScreenY());
@@ -313,9 +328,16 @@ public class VerkehrssimulationController implements Initializable {
 		int x = cIndex == null ? 0 : cIndex;
 		int y = rIndex == null ? 0 : rIndex;
 		
+		simulation.grid.xPos.set(x);
+		simulation.grid.yPos.set(y);
+		simulation.grid.setGrid(this.name);
+		
+		
+		
+		
 		//brauchen wir für grid
 		
-		aktGrid.setGrid(this.name,x,y);
+		//aktGrid.setGrid(this.name,x,y);
 		System.out.println(x + " " + y);
 
 		Image img = event.getDragboard().getImage();
@@ -576,22 +598,33 @@ public class VerkehrssimulationController implements Initializable {
 	public VerkehrssimulationController() {
 		rightClickMenu = new MenuItem("Element lÃ¶schen");
 		contextMenu = new ContextMenu();
-		aktGrid = new Grid();
+		simulation = new Simulation();
 		
+//		aktGrid.xPos.addListener(new ChangeListener<Number>() {
+//
+//			@Override
+//			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//				System.out.println("Neuer Wert Property: " + newValue);
+//				
+//			}
+//			
+//		});
+//
+//		aktGrid.yPos.addListener(new ChangeListener<Number>() {
+//
+//			@Override
+//			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//				System.out.println("Neuer Wert Property: " + newValue);
+//				
+//			}
+//			
+//		});
 		//initialize();
 	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		/*aktGrid.xPos.addListener(new ChangeListener<Integer>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
-			
-				
-			}
-			
-		});*/
+		
 	
 	}
 	

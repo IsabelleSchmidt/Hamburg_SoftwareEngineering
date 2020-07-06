@@ -4,6 +4,7 @@ import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import business.components.Item;
+import business.simulation.Grid;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,7 +22,7 @@ import java.util.List;
 
 public class XMLFile {
 
-	public static void saveAsXML(ArrayList<Item> itemList,String path) {
+	public static void saveAsXML(ArrayList<Item> itemList,String path,Grid grid) {
 
 		try {
 			DocumentBuilderFactory documentF = DocumentBuilderFactory.newInstance();
@@ -29,8 +30,25 @@ public class XMLFile {
 			Document document = documentB.newDocument();
 
 			
-			Element root = document.createElement("Hamburg");
+			Element root = document.createElement("Simulation");
 			document.appendChild(root);
+			
+			if(grid == null) {
+				System.out.println("Sie müssen mindestens eine Straße gesetzt haben.");
+			}
+			
+			Element gridlayout = document.createElement("grid");
+			
+			Element x = document.createElement("x");
+			x.appendChild(document.createTextNode(String.valueOf(grid.getX())));
+			gridlayout.appendChild(x);
+			
+			Element y = document.createElement("y");
+			y.appendChild(document.createTextNode(String.valueOf(grid.getY())));
+			gridlayout.appendChild(y);
+			
+			root.appendChild(gridlayout);
+			
 			
 			
 			for(Item i : itemList){

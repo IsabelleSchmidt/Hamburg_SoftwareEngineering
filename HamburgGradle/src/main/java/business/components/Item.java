@@ -14,7 +14,9 @@ public class Item {
 		
 	}
 	
-	
+	public void print() {
+		System.out.println("x: " + positionX + "y: " + positionY);
+	}
 
 	public int getPositionX() {
 		return positionX;

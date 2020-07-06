@@ -5,19 +5,23 @@ public class Street extends Item{
 	//muss sich merken welche straﬂe und wo es gesetzt wurde
 	
 	
-	private String type;
+	private StreetType type;
 
-    public Street(String type,int positionX, int positionY, int alignment){
+    public Street(StreetType type,int positionX, int positionY, int alignment){
     	super(positionX, positionY, alignment);
     	this.type = type;
     }
+    
     public Street(int positionX, int positionY, int alignment){
     	super(positionX, positionY, alignment);
     	
     }
 
    
-    public String getType() {
+    public void setType(StreetType type) {
+    	this.type = type;
+    }
+    public StreetType getType() {
 		return type;
 	}
 }

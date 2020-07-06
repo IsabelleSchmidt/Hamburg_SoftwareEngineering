@@ -17,7 +17,7 @@ import storage.XMLFile;
 public class VerkehrssimulationMain extends Application {
 
 	private static ArrayList<Item>itemList;
-	//private Simulation simulation;
+	private static Simulation simulation;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -54,7 +54,7 @@ public class VerkehrssimulationMain extends Application {
 	public static void save() {
 		File file = getFile().showSaveDialog(null);
 		if(file != null) {
-			XMLFile.saveAsXML(itemList,file.getPath());
+			XMLFile.saveAsXML(itemList,file.getPath(), simulation.grid);
 		}
 	}
 	

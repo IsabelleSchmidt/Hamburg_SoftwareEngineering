@@ -9,6 +9,9 @@ import business.components.Trafficlight;
 import business.components.Vehicle;
 
 public class Simulation {
+	
+	public Grid grid;
+//	ArrayList<Item> elemente; 
 
 	/* Main
 	 * 
@@ -17,26 +20,9 @@ public class Simulation {
 	 */
 	
 	public Simulation() {
-		
+		grid = new Grid();
+//		elemente = new ArrayList<>();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }
 	/*private ArrayList<Street> streets;
