@@ -3,8 +3,8 @@ package business.simulation;
 
 import java.util.ArrayList;
 
+import business.components.Item;
 import business.components.Street;
-import business.components.StreetType;
 import business.components.Trafficlight;
 import business.components.Vehicle;
 
@@ -16,90 +16,87 @@ public class Simulation {
 	 * wird in der fxsimulation aufgerufen
 	 */
 	
-	private SimulationPreview simulationPreview;
-	private ArrayList<Street> crossing;
-	private ArrayList<Street> curve;
-	private ArrayList<Street> junction;
-	private ArrayList<Street> straight;
-	private ArrayList<Trafficlight> trafficLights;
-	private ArrayList<Vehicle> vehicles;
-	
-	public Simulation(SimulationPreview simulationPreview,ArrayList<Street> crossing,ArrayList<Street> curve,ArrayList<Street> junction,
-			ArrayList<Street> straight,ArrayList<Trafficlight> trafficLights,ArrayList<Vehicle> vehicles) {
+	public Simulation() {
 		
-		this.simulationPreview = simulationPreview;
-		this.crossing = crossing;
-		this.curve = curve;
-		this.junction = junction;
-		this.straight = straight;
-		this.trafficLights = trafficLights;
-		this.vehicles = vehicles;
-	
 	}
 	
-	public void addStreetItems(Street item) {
-		int y= item.getPositionY();
-		int x = item.getPositionX();
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}
+	/*private ArrayList<Street> streets;
+	private ArrayList<Trafficlight> trafficLights;
+	private ArrayList<Vehicle> vehicles;
+	private ArrayList<Item> allItems = new ArrayList<>();
+	
+	public Simulation(ArrayList<Street> streets,
+			ArrayList<Trafficlight> trafficLights,ArrayList<Vehicle> vehicles) {
 		
-		if(item.getType() == StreetType.CROSSING) {
-			this.crossing.add(item);
-		}else if(item.getType() == StreetType.CURVE) {
-			this.curve.add(item);
-		}else if(item.getType() == StreetType.JUNCTION) {
-			this.junction.add(item);
-		}else if(item.getType() == StreetType.STRAIGHT) {
-			this.straight.add(item);
-		}
+		this.streets = streets;
+		this.trafficLights = trafficLights;
+		this.vehicles = vehicles;
+		
+		allItems.addAll(streets);
+		allItems.addAll(trafficLights);
+		allItems.addAll(vehicles);
+	}
+	
+	public void addStreetItems(Street street) {
+		int y= street.getPositionY();
+		int x = street.getPositionX();
+		streets.add(street);
 	}
 	
 	
 	public void addTrafficLight(Trafficlight trafficlight) {
+		int y= trafficlight.getPositionY();
+		int x = trafficlight.getPositionX();
 		trafficLights.add(trafficlight);
 	}
 	public void addVehicle(Vehicle vehicle) {
+		int y= vehicle.getPositionY();
+		int x = vehicle.getPositionX();
 		vehicles.add(vehicle);
 	}
 	
+	public void removeStreet(Street street) {
+		streets.remove(street);
+	}
+	
+	public void removeTrafficLight(Trafficlight trafficlight) {
+		trafficLights.remove(trafficlight);
+	}
+	public void removeVehicle(Vehicle vehicle) {
+		vehicles.remove(vehicle);
+	}
 	
 	
-	public ArrayList<Street> getCrossing() {
-		return crossing;
+
+	public ArrayList<Street> getStreet() {
+		return streets;
 	}
 
 
-	public void setCrossing(ArrayList<Street> crossing) {
-		this.crossing = crossing;
+	public void setStreet(ArrayList<Street> streets) {
+		this.streets = streets;
 	}
+	
 
-
-	public ArrayList<Street> getCurve() {
-		return curve;
-	}
-
-
-	public void setCurve(ArrayList<Street> curve) {
-		this.curve = curve;
-	}
-
-
-	public ArrayList<Street> getJunction() {
-		return junction;
-	}
-
-
-	public void setJunction(ArrayList<Street> junction) {
-		this.junction = junction;
-	}
-
-
-	public ArrayList<Street> getStraight() {
-		return straight;
-	}
-
-
-	public void setStraight(ArrayList<Street> straight) {
-		this.straight = straight;
-	}
 
 
 	public ArrayList<Trafficlight> getTrafficLights() {
@@ -121,5 +118,7 @@ public class Simulation {
 		this.vehicles = vehicles;
 	}
 	
-	
-}
+	public ArrayList<Item> getAllItems(){
+		return allItems;
+	}
+}*/

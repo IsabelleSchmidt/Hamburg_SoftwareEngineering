@@ -5,8 +5,8 @@ import javafx.animation.AnimationTimer;
 public class Vehicle extends Item{
 
 
-	double width;
-	double length;
+	//double width;
+	//double length;
 	
 	boolean running;
 	
@@ -28,15 +28,13 @@ public class Vehicle extends Item{
 		
 	}
 	
-	public Vehicle(int positionX, int positionY, int alignment, Color color) {		
-		super(positionX, positionY, alignment);
+	public Vehicle(int positionX, int positionY,int alignment, Color color) {		
+		super(positionX, positionY,alignment);
 		this.color = color;
 	
 	}
 	
-	private void remove() {
-		
-	}
+
 	
 	private void drive() {
 		

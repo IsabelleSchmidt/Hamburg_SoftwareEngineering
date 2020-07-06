@@ -18,8 +18,20 @@ public class Trafficlight extends Street {
 	}
 
 	
-
-	public void remove() {
-
+	public String getStatus() {
+		return status;
 	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public int getDuration() {
+		return duration;
+	}
+
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+	
 }

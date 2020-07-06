@@ -5,11 +5,12 @@ public class Item {
 	private int positionX;
 	private int positionY;
 	private int alignment;
+
 	
 	public Item(int positionX, int positionY, int alignment) {
 		this.setPositionX(positionX);
 		this.setPositionY(positionY);
-		this.setAlignment(alignment);		
+		this.setAlignment(alignment);
 		
 	}
 	
@@ -31,11 +32,17 @@ public class Item {
 		this.positionY = positionY;
 	}
 
+
+
 	public int getAlignment() {
 		return alignment;
 	}
 
+
+
 	public void setAlignment(int alignment) {
 		this.alignment = alignment;
 	}
+
+	
 }

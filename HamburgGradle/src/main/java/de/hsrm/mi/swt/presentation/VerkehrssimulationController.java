@@ -8,11 +8,15 @@ import java.util.ResourceBundle;
 
 import com.sun.glass.ui.Clipboard;
 
+import business.components.Item;
+import business.simulation.Grid;
 import javafx.animation.AnimationTimer;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
@@ -46,6 +50,10 @@ public class VerkehrssimulationController implements Initializable {
 
 	MenuItem rightClickMenu;
 	ContextMenu contextMenu;
+	Grid aktGrid;
+	String name;
+	
+	
 
 	private static final double W = 600, H = 400;
 	private FileInputStream inputstream;
@@ -225,6 +233,15 @@ public class VerkehrssimulationController implements Initializable {
 
 		event.consume();
 
+		if(picked.getId().equals("StreetElementStraight")) {
+			name = "Straight";
+		}else if(picked.getId().equals("StreetElementCrossing")) {
+			name = "Crossing";
+		}else if(picked.getId().equals("StreetElementCurve")) {
+			name = "Curve";
+		}else if(picked.getId().equals("StreetElementJunction")) {
+			name = "Junction";
+		}
 	}
 
 	@FXML
@@ -246,7 +263,7 @@ public class VerkehrssimulationController implements Initializable {
 
 		if (event.getButton() == MouseButton.PRIMARY) {
 			int counter = event.getClickCount(); // TODO: Clicks müssen schnell hintereinander erfolgen, sonst keine
-													// Roation
+													// Rotation
 			node.setRotate(90 * counter);
 			counter = 0;
 		}
@@ -254,6 +271,7 @@ public class VerkehrssimulationController implements Initializable {
 		if (event.getButton() == MouseButton.SECONDARY) {
 			ImageView img = (ImageView) node;
 			img.setImage(null);
+		
 //			contextMenu.getItems().addAll(rightClickMenu);
 //			contextMenu.show(node, event.getScreenX(), event.getScreenY());
 
@@ -264,7 +282,7 @@ public class VerkehrssimulationController implements Initializable {
 		int x = cIndex == null ? 0 : cIndex;
 		int y = rIndex == null ? 0 : rIndex;
 
-		// System.out.println(x + " " + y);
+		System.out.println(x + " " + y);
 
 	}
 
@@ -285,7 +303,7 @@ public class VerkehrssimulationController implements Initializable {
 
 		Node node = event.getPickResult().getIntersectedNode();
 
-		double doubleX = event.getScreenY();
+		double doubleX = event.getSceneX();		
 		double doubleY = event.getSceneY();
 
 		System.out.println(doubleY + " " + doubleX);
@@ -294,7 +312,10 @@ public class VerkehrssimulationController implements Initializable {
 		Integer rIndex = GridPane.getRowIndex(node);
 		int x = cIndex == null ? 0 : cIndex;
 		int y = rIndex == null ? 0 : rIndex;
-
+		
+		//brauchen wir f�r grid
+		
+		aktGrid.setGrid(this.name,x,y);
 		System.out.println(x + " " + y);
 
 		Image img = event.getDragboard().getImage();
@@ -405,6 +426,10 @@ public class VerkehrssimulationController implements Initializable {
 	void loadSimulation(ActionEvent event) {
 		scrollToloadSimulation();
 	}
+	@FXML
+	void loadSimulationFile(ActionEvent event) {
+		VerkehrssimulationMain.load();
+	}
 
 	@FXML
 	void newSimulation(ActionEvent event) {
@@ -413,26 +438,6 @@ public class VerkehrssimulationController implements Initializable {
 
 	@FXML
 	void pauseSimulation(ActionEvent event) {
-
-	}
-
-	@FXML
-	void placeDown(ActionEvent event) {
-
-	}
-
-	@FXML
-	void placeLeft(ActionEvent event) {
-
-	}
-
-	@FXML
-	void placeRight(ActionEvent event) {
-
-	}
-
-	@FXML
-	void placeUp(ActionEvent event) {
 
 	}
 
@@ -451,19 +456,10 @@ public class VerkehrssimulationController implements Initializable {
 
 	}
 
-	@FXML
-	void rotateLeft(ActionEvent event) {
-
-	}
-
-	@FXML
-	void rotateRight(ActionEvent event) {
-
-	}
 
 	@FXML
 	void safeSimulation(ActionEvent event) {
-
+		VerkehrssimulationMain.save();
 	}
 
 	@FXML
@@ -580,11 +576,23 @@ public class VerkehrssimulationController implements Initializable {
 	public VerkehrssimulationController() {
 		rightClickMenu = new MenuItem("Element löschen");
 		contextMenu = new ContextMenu();
+		aktGrid = new Grid();
+		
+		//initialize();
 	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		/*aktGrid.xPos.addListener(new ChangeListener<Integer>() {
 
+			@Override
+			public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
+			
+				
+			}
+			
+		});*/
+	
 	}
-
+	
 }

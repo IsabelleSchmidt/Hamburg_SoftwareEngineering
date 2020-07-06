@@ -288,7 +288,7 @@
                                       </rowConstraints>
                                        <children>
                                           <Button fx:id="functionButtonSafe" mnemonicParsing="false" onAction="#safeSimulation" text="Speichern" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                          <Button fx:id="functioButtonLoad" mnemonicParsing="false" onAction="#loadSimulation" text="Laden" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                          <Button fx:id="functioButtonLoad" mnemonicParsing="false" onAction="#loadSimulationFile" text="Laden" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                                           <Button fx:id="functionButtonMenuBack" mnemonicParsing="false" onAction="#backToMenu" text="Hauptmenü" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                                           <Button fx:id="functionButtonQuit" mnemonicParsing="false" onAction="#quitSiumulation" text="Beenden" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
                                        </children>

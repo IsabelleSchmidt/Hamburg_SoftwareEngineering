@@ -1,8 +1,5 @@
 package business.components;
 
 public enum StreetType {
-	CROSSING,CURVE,JUNCTION,STRAIGHT;
-	
-	
-
+	CURVE, CROSSING, STRAIGHT, JUNCTION
 }
