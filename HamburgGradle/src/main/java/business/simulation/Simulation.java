@@ -15,12 +15,12 @@ public class Simulation {
 
 	/* Main
 	 * 
-	 * Mit gridgröße, anzahl der straßenelemente, anzahl der autos, 
+	 * Mit gridgrï¿½ï¿½e, anzahl der straï¿½enelemente, anzahl der autos, 
 	 * wird in der fxsimulation aufgerufen
 	 */
 	
 	public Simulation() {
-		grid = new Grid();
+		// grid = new Grid();
 //		elemente = new ArrayList<>();
 	}
 	

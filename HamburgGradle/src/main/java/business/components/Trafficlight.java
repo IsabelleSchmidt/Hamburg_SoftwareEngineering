@@ -6,18 +6,16 @@ package business.components;
  * Art von Straße
  *
  */
-public class Trafficlight extends Street {
-	
+public class Trafficlight {
+
 	private String status;
 	private int duration;
 
-	public Trafficlight(int positionX, int positionY, int alignment, String status, int duration) {
-		super(positionX, positionY, alignment);
+	public Trafficlight() {
 		this.status = status;
 		this.duration = duration;
 	}
 
-	
 	public String getStatus() {
 		return status;
 	}
@@ -33,5 +31,5 @@ public class Trafficlight extends Street {
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
-	
+
 }

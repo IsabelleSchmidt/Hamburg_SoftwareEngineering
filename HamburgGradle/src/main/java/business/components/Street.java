@@ -1,27 +1,23 @@
 package business.components;
 
-public class Street extends Item{
+import java.util.ArrayList;
+import java.util.List;
 
-	//muss sich merken welche straße und wo es gesetzt wurde
-	
-	
+public abstract class Street {
+
+	// muss sich merken welche straï¿½e und wo es gesetzt wurde
+
 	private StreetType type;
+	protected int rotationCount = 0;
+	protected List<Direction> directions = new ArrayList<>();
 
-    public Street(StreetType type,int positionX, int positionY, int alignment){
-    	super(positionX, positionY, alignment);
-    	this.type = type;
-    }
-    
-    public Street(int positionX, int positionY, int alignment){
-    	super(positionX, positionY, alignment);
-    	
-    }
+	public void setType(StreetType type) {
+		this.type = type;
+	}
 
-   
-    public void setType(StreetType type) {
-    	this.type = type;
-    }
-    public StreetType getType() {
+	public StreetType getType() {
 		return type;
 	}
+
+	protected abstract void rotate();
 }

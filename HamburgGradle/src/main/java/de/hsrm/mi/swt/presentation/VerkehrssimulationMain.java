@@ -12,7 +12,7 @@ import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import storage.XMLFile;
+//import storage.XMLFile;
 
 public class VerkehrssimulationMain extends Application {
 
@@ -54,14 +54,14 @@ public class VerkehrssimulationMain extends Application {
 	public static void save() {
 		File file = getFile().showSaveDialog(null);
 		if(file != null) {
-			XMLFile.saveAsXML(itemList,file.getPath(), simulation.grid);
+			//XMLFile.saveAsXML(itemList,file.getPath(), simulation.grid);
 		}
 	}
 	
 	public static void load() {
 		File file = getFile().showOpenDialog(null);
 		if(file!=null) {
-			itemList = XMLFile.loadFromXML(file.getPath());
+			//itemList = XMLFile.loadFromXML(file.getPath());
 		}
 	}
 }
