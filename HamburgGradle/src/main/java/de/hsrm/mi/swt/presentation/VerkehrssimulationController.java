@@ -55,14 +55,13 @@ public class VerkehrssimulationController implements Initializable {
 	Simulation simulation;
 	String name;
 	
-	
+	VerkehrssimulationMain main;
 
 	private static final double W = 600, H = 400;
 	private FileInputStream inputstream;
 	private Node car;
 
-	//@FXML
-	//private AnchorPane loadSimulationPane;
+	
 
 	@FXML
 	private Button loadiSimulationButton;
@@ -283,7 +282,8 @@ public class VerkehrssimulationController implements Initializable {
 			
 			simulation.grid.xPos.set(x);
 			simulation.grid.yPos.set(y);
-			simulation.grid.removeItem();
+			//simulation.grid.removeItem(x,y);
+			simulation.removeItem(x, y);
 			
 			System.out.println("werteeee:" + x + "," + y);
 		
@@ -330,7 +330,8 @@ public class VerkehrssimulationController implements Initializable {
 		
 		simulation.grid.xPos.set(x);
 		simulation.grid.yPos.set(y);
-		simulation.grid.setGrid(this.name);
+		//simulation.grid.setGrid(this.name);
+		simulation.addItem(this.name);
 		
 		System.out.println(x + " " + y);
 
@@ -441,7 +442,7 @@ public class VerkehrssimulationController implements Initializable {
 
 	@FXML
 	void loadSimulationFile(ActionEvent event) {
-		VerkehrssimulationMain.load();
+		main.load();
 	}
 
 	@FXML
@@ -472,7 +473,9 @@ public class VerkehrssimulationController implements Initializable {
 
 	@FXML
 	void safeSimulation(ActionEvent event) {
-		VerkehrssimulationMain.save();
+		System.out.println("safeController");
+		
+		main.save();
 	}
 
 	@FXML
@@ -521,11 +524,6 @@ public class VerkehrssimulationController implements Initializable {
 	}
 
 	public void scrollToMenu() {
-		/*TranslateTransition tr1 = new TranslateTransition();
-		tr1.setDuration(Duration.millis(300));
-		tr1.setToX(0);
-		tr1.setToY(-700);
-		tr1.setNode(loadSimulationPane);*/
 		TranslateTransition tr3 = new TranslateTransition();
 		tr3.setDuration(Duration.millis(300));
 		tr3.setToX(0);
@@ -549,11 +547,6 @@ public class VerkehrssimulationController implements Initializable {
 		tr1.setToX(0);
 		tr1.setToY(-700);
 		tr1.setNode(menuPane);
-		/*TranslateTransition tr3 = new TranslateTransition();
-		tr3.setDuration(Duration.millis(300));
-		tr3.setToX(0);
-		tr3.setToY(-700);
-		tr3.setNode(loadSimulationPane);*/
 		TranslateTransition tr2 = new TranslateTransition();
 		tr2.setDuration(Duration.millis(300));
 		tr2.setFromX(0);
@@ -569,6 +562,7 @@ public class VerkehrssimulationController implements Initializable {
 		rightClickMenu = new MenuItem("Element löschen");
 		contextMenu = new ContextMenu();
 		simulation = new Simulation();
+		main = new VerkehrssimulationMain();
 		
 //		aktGrid.xPos.addListener(new ChangeListener<Number>() {
 //

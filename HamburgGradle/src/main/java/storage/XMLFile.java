@@ -22,7 +22,8 @@ import java.util.List;
 
 public class XMLFile {
 
-	public static void saveAsXML(ArrayList<Item> itemList,String path,Grid grid) {
+	public static void saveAsXML(String path,ArrayList<Item>list) {
+		System.out.println("SAVE");	
 
 		try {
 			DocumentBuilderFactory documentF = DocumentBuilderFactory.newInstance();
@@ -33,11 +34,11 @@ public class XMLFile {
 			Element root = document.createElement("Simulation");
 			document.appendChild(root);
 			
-			if(grid == null) {
+			/*if(grid == null) {
 				System.out.println("Sie müssen mindestens eine Straße gesetzt haben.");
-			}
+			}*/
 			
-			Element gridlayout = document.createElement("grid");
+			/*Element gridlayout = document.createElement("grid");
 			
 			Element x = document.createElement("x");
 			x.appendChild(document.createTextNode(String.valueOf(grid.getX())));
@@ -62,7 +63,7 @@ public class XMLFile {
                 Element ypos = document.createElement("y");
                 ypos.appendChild(document.createTextNode(String.valueOf(i.getPositionY())));
                 element.appendChild(ypos);
-			}
+			}*/
 			
 			
 			
