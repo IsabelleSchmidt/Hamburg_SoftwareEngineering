@@ -61,8 +61,8 @@ public class VerkehrssimulationController implements Initializable {
 	private FileInputStream inputstream;
 	private Node car;
 
-	@FXML
-	private AnchorPane loadSimulationPane;
+	//@FXML
+	//private AnchorPane loadSimulationPane;
 
 	@FXML
 	private Button loadiSimulationButton;
@@ -332,12 +332,6 @@ public class VerkehrssimulationController implements Initializable {
 		simulation.grid.yPos.set(y);
 		simulation.grid.setGrid(this.name);
 		
-		
-		
-		
-		//brauchen wir für grid
-		
-		//aktGrid.setGrid(this.name,x,y);
 		System.out.println(x + " " + y);
 
 		Image img = event.getDragboard().getImage();
@@ -444,10 +438,7 @@ public class VerkehrssimulationController implements Initializable {
 
 	}
 
-	@FXML
-	void loadSimulation(ActionEvent event) {
-		scrollToloadSimulation();
-	}
+
 	@FXML
 	void loadSimulationFile(ActionEvent event) {
 		VerkehrssimulationMain.load();
@@ -530,11 +521,11 @@ public class VerkehrssimulationController implements Initializable {
 	}
 
 	public void scrollToMenu() {
-		TranslateTransition tr1 = new TranslateTransition();
+		/*TranslateTransition tr1 = new TranslateTransition();
 		tr1.setDuration(Duration.millis(300));
 		tr1.setToX(0);
 		tr1.setToY(-700);
-		tr1.setNode(loadSimulationPane);
+		tr1.setNode(loadSimulationPane);*/
 		TranslateTransition tr3 = new TranslateTransition();
 		tr3.setDuration(Duration.millis(300));
 		tr3.setToX(0);
@@ -547,31 +538,10 @@ public class VerkehrssimulationController implements Initializable {
 		tr2.setToX(0);
 		tr2.setToY(0);
 		tr2.setNode(menuPane);
-		ParallelTransition pt = new ParallelTransition(tr1, tr2, tr3);
+		ParallelTransition pt = new ParallelTransition( tr2, tr3);
 		pt.play();
 	}
 
-	public void scrollToloadSimulation() {
-		TranslateTransition tr1 = new TranslateTransition();
-		tr1.setDuration(Duration.millis(300));
-		tr1.setToX(0);
-		tr1.setToY(-700);
-		tr1.setNode(menuPane);
-		TranslateTransition tr3 = new TranslateTransition();
-		tr3.setDuration(Duration.millis(300));
-		tr3.setToX(0);
-		tr3.setToY(-700);
-		tr3.setNode(simulationPane);
-		TranslateTransition tr2 = new TranslateTransition();
-		tr2.setDuration(Duration.millis(300));
-		tr2.setFromX(0);
-		tr2.setFromY(700);
-		tr2.setToX(0);
-		tr2.setToY(0);
-		tr2.setNode(loadSimulationPane);
-		ParallelTransition pt = new ParallelTransition(tr1, tr2, tr3);
-		pt.play();
-	}
 
 	public void scrollToSimulation() {
 		TranslateTransition tr1 = new TranslateTransition();
@@ -579,11 +549,11 @@ public class VerkehrssimulationController implements Initializable {
 		tr1.setToX(0);
 		tr1.setToY(-700);
 		tr1.setNode(menuPane);
-		TranslateTransition tr3 = new TranslateTransition();
+		/*TranslateTransition tr3 = new TranslateTransition();
 		tr3.setDuration(Duration.millis(300));
 		tr3.setToX(0);
 		tr3.setToY(-700);
-		tr3.setNode(loadSimulationPane);
+		tr3.setNode(loadSimulationPane);*/
 		TranslateTransition tr2 = new TranslateTransition();
 		tr2.setDuration(Duration.millis(300));
 		tr2.setFromX(0);
@@ -591,7 +561,7 @@ public class VerkehrssimulationController implements Initializable {
 		tr2.setToX(0);
 		tr2.setToY(0);
 		tr2.setNode(simulationPane);
-		ParallelTransition pt = new ParallelTransition(tr1, tr2, tr3);
+		ParallelTransition pt = new ParallelTransition(tr1, tr2);
 		pt.play();
 	}
 
