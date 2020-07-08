@@ -10,20 +10,15 @@ import java.util.Random;
 
 public class TriggerPoints {
 
-	// TRIGGERWEST, TRIGGERNORTH, TRIGGEREAST, TRIGGERSOUTH, TURNWEST, TURNNORTH,
-	// TURNEAST, TURNSOUTH
+	private Point triggerWest = new Point(10, 67);
+	private Point triggerNorth = new Point(33, 10);
+	private Point triggerEast = new Point(90, 33);
+	private Point triggerSouth = new Point(67, 90);
 
-	// private int[3][3] TRIGGERWEST {{10,67},{33,67},{67,67}};
-
-	Point triggerWest = new Point(10, 67);
-	Point triggerNorth = new Point(33, 10);
-	Point triggerEast = new Point(90, 33);
-	Point triggerSouth = new Point(67, 90);
-
-	int[][] turnsWest = { { 33, 67 }, { 67, 67 } };
-	int[][] turnsNorth = { { 33, 33 }, { 33, 67 } };
-	int[][] turnsEast = { { 67, 33 }, { 33, 33 } };
-	int[][] turnsSouth = { { 67, 67 }, { 67, 33 } };
+	private Point downRight = new Point(67, 67);
+	private Point upRight = new Point(67, 33);
+	private Point downLeft = new Point(33, 67);
+	private Point upLeft = new Point(33, 33);
 
 	protected List<Direction> directions = new ArrayList<>();
 
@@ -36,25 +31,25 @@ public class TriggerPoints {
 
 	}
 
-	public Direction chooseRandomDirection(Street street, Direction vehicleDirection, Vehicle vehicle) {
+	public Direction chooseRandomDirection(Street street, Direction vehicleDirection) {
 
 		Random random = new Random();
-
 		List<Direction> directions = new ArrayList<Direction>();
+		int index = 0;
+
 		for (Direction dir : street.getDirections()) {
 			directions.add(dir);
 		}
-		int count = 0;
-		for (Direction dir : directions) {
-			System.out.println(tellOposite(vehicleDirection));
-			System.out.println(vehicle.getDirection());
-			if (tellOposite(vehicleDirection).equals(dir)) {
-				directions.remove(count);
+
+		for (Direction d : directions) {
+			if (tellOposite(vehicleDirection).equals(d)) {
+				directions.remove(index);
 				break;
 			}
-			count++;
+
+			index++;
 		}
-		System.out.println(directions.get(random.nextInt(directions.size())));
+
 		return directions.get(random.nextInt(directions.size()));
 
 //		if (street.toString().contains("Crossing")) {
@@ -118,17 +113,11 @@ public class TriggerPoints {
 		return false;
 	}
 
+	
 	public Direction canTurnTo(Vehicle vehicle) {
 
 		Direction direction = vehicle.getDirection();
-		Direction nextDirection = vehicle.getNextDirection();
-		// Point point = getFirstTunPoint(direction);
 		Point carPoint = new Point(vehicle.getxPostionInt() % 100, vehicle.getyPositionInt() % 100);
-
-		Point downRight = new Point(67, 67);
-		Point upRight = new Point(67, 33);
-		Point downLeft = new Point(33, 67);
-		Point upLeft = new Point(33, 33);
 
 		switch (direction) {
 		case UP:
@@ -136,6 +125,7 @@ public class TriggerPoints {
 			if (carPoint.equals(downRight)) {
 				return Direction.RIGHT;
 			}
+
 			if (carPoint.equals(upRight)) {
 				return Direction.LEFT;
 			}

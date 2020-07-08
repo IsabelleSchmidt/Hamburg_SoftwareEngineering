@@ -528,7 +528,7 @@ public class VerkehrssimulationController implements Initializable {
 					int y = car.getyPositionInt();
 
 					if (trigger.isTriggered(car, x, y)) {
-						car.setNextDirection(trigger.chooseRandomDirection(grid.getStreet(x / 100, y / 100), car.getDirection(), car));
+						car.setNextDirection(trigger.chooseRandomDirection(grid.getStreet(x / 100, y / 100), car.getDirection()));
 
 					}
 
