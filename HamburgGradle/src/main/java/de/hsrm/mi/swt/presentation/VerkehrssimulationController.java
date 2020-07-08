@@ -522,7 +522,6 @@ public class VerkehrssimulationController implements Initializable {
 					 * 
 					 */
 
-					// if()
 
 					int x = car.getxPostionInt();
 					int y = car.getyPositionInt();

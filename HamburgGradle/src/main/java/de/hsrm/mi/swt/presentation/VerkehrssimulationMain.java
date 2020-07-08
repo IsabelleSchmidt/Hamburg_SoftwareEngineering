@@ -2,8 +2,6 @@ package de.hsrm.mi.swt.presentation;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import business.components.Item;
 import business.simulation.Simulation;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +14,6 @@ import javafx.stage.StageStyle;
 
 public class VerkehrssimulationMain extends Application {
 
-	private static ArrayList<Item>itemList;
 	private static Simulation simulation;
 	
 	@Override

@@ -2,7 +2,6 @@ package business.simulation;
 
 import java.util.ArrayList;
 
-import business.components.Item;
 import business.components.Street;
 import business.components.StreetType;
 import javafx.beans.property.IntegerProperty;
