@@ -1,22 +1,28 @@
 package de.hsrm.mi.swt.presentation;
 
+import java.awt.Point;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import business.components.Crossing;
 import business.components.Curve;
+import business.components.Direction;
 import business.components.Junction;
 import business.components.Straight;
 import business.components.Street;
+import business.components.TriggerPoints;
 import business.components.Vehicle;
 import business.simulation.Grid;
+import business.simulation.Simulation;
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
 import javafx.animation.ParallelTransition;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -39,9 +45,12 @@ public class VerkehrssimulationController implements Initializable {
 
 	private static final int GRIDSIZE = 5;
 	private Grid grid = new Grid(GRIDSIZE);
-	private ImageView[][] imageViewField;
+	private Simulation simulation;
+	// private ImageView[][] imageViewField;
 	private FileInputStream inputstream;
 	private HashMap<Vehicle, ImageView> vehicles = new HashMap<>();
+	private Timeline timeline;
+	private AnimationTimer timer;
 
 	@FXML
 	private Button loadiSimulationButton;
@@ -297,6 +306,7 @@ public class VerkehrssimulationController implements Initializable {
 
 			Image image = new Image(inputstream);
 			ImageView vehicleImgV = new ImageView(image);
+
 			simulationGrid.getChildren().add(vehicleImgV);
 			Vehicle v = new Vehicle(x * 100, y * 100, grid);
 			vehicleImgV.setOnMouseClicked(e -> {
@@ -318,7 +328,7 @@ public class VerkehrssimulationController implements Initializable {
 		default:
 			break;
 		}
-		System.out.println(id);
+		// System.out.println(id);
 		if (!id.equals("StreetElementCar")) {
 			((ImageView) event.getPickResult().getIntersectedNode()).setImage(img);
 		}
@@ -337,6 +347,12 @@ public class VerkehrssimulationController implements Initializable {
 		v.getxPostion().addListener((observable, oldValue, newV) -> {
 			ImageView imageV = vehicles.get(v);
 			imageV.setX(v.getxPostionInt() - imageV.getFitWidth() / 2);
+
+//			if (newV.equals(400)) {
+//				v.setDirection(Direction.DOWN);
+//			}
+
+			//System.out.println("Gridpos x: " + newV.intValue() / 100);
 		});
 
 		v.getyPosition().addListener((observable, oldValue, newV) -> {
@@ -354,6 +370,13 @@ public class VerkehrssimulationController implements Initializable {
 
 		});
 
+	}
+
+	private void initSimulationListener(Simulation simulation) {
+
+		simulation.getPlaybackSpeed().addListener((observable, oldValue, newV) -> {
+			System.out.println(newV);
+		});
 	}
 
 	@FXML
@@ -417,7 +440,13 @@ public class VerkehrssimulationController implements Initializable {
 
 	@FXML
 	void increaseSpeed(ActionEvent event) {
+		simulation.increasePlaybackSpeed();
 
+	}
+
+	@FXML
+	void decreaseSpeed(ActionEvent event) {
+		simulation.decreasePlaybackSpeed();
 	}
 
 	@FXML
@@ -462,11 +491,64 @@ public class VerkehrssimulationController implements Initializable {
 
 	@FXML
 	void startSimulation(ActionEvent event) {
-		for (Vehicle v : vehicles.keySet()) {
 
-			v.drive();
+		TriggerPoints trigger = new TriggerPoints();
+		simulation = new Simulation();
+		initSimulationListener(simulation);
+		int playbackSpeed = simulation.getPlaybackSpeed().get();
 
-		}
+		timeline = new Timeline();
+		timeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.setAutoReverse(true);
+
+		timer = new AnimationTimer() {
+
+			@Override
+			public void handle(long now) {
+
+				for (Vehicle car : vehicles.keySet()) {
+
+					// trigger.chooseRandomDirection(street, streetDirection, car.getDirection());
+					// street wie folgt ermitteln: akutellen Koorditen/100, damit im grid x,y
+					// raussuchen und direction ziehen
+
+					/*
+					 * Um Abbiegung zu erkennen, folgendes:
+					 * 
+					 * - triggerPunkt festlegen - ermittel das Stück Straße unter dir - in welche
+					 * Richtungen kannst du dort abbiegen? - aus welcher Richtung kommst du? Die
+					 * muss abgezogen werden - nächste richtungsänderung speichern - Richtung ändern
+					 * an stelle x/y -
+					 * 
+					 */
+
+					// if()
+
+					int x = car.getxPostionInt();
+					int y = car.getyPositionInt();
+
+					if (trigger.isTriggered(car, x, y)) {
+						car.setNextDirection(trigger.chooseRandomDirection(grid.getStreet(x / 100, y / 100), car.getDirection(), car));
+
+					}
+
+					if (trigger.canTurnTo(car) == car.getNextDirection()) {
+						car.setDirection(car.getNextDirection());
+					}
+
+					car.drive();
+
+				}
+			}
+		};
+
+		Duration duration = Duration.millis(1000 * playbackSpeed);
+		KeyFrame keyFrame = new KeyFrame(duration);
+
+		timeline.getKeyFrames().add(keyFrame);
+		timeline.play();
+		timer.start();
+
 	}
 
 	public void scrollToMenu() {
@@ -514,7 +596,7 @@ public class VerkehrssimulationController implements Initializable {
 
 					if (newV[i][j] != null) {
 
-						System.out.println(newV[i][j].getClass().toString());
+						//System.out.println(newV[i][j].getClass().toString());
 
 					}
 

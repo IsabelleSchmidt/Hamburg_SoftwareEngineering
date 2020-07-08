@@ -6,7 +6,6 @@ import java.util.List;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 
-
 /**
  * 
  * Street
@@ -35,4 +34,9 @@ public abstract class Street {
 	public void setRotationCount(SimpleIntegerProperty rotationCount) {
 		this.rotationCount = rotationCount;
 	}
+
+	public List<Direction> getDirections() {
+		return directions;
+	}
+
 }

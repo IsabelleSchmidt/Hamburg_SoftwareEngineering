@@ -9,6 +9,7 @@ public class Vehicle {
 
 	private Color color;
 	private Direction direction = Direction.RIGHT;
+	private Direction nextDirection = null;
 	private SimpleIntegerProperty xPosition, yPosition;
 	private Grid grid;
 	private SimpleIntegerProperty rotationCount;
@@ -33,11 +34,19 @@ public class Vehicle {
 		this.grid = grid;
 
 	}
-	
-	//TODO: sauber bennen
+
+	// TODO: sauber bennen
 
 	public SimpleIntegerProperty getxPostion() {
 		return xPosition;
+	}
+
+	public Direction getNextDirection() {
+		return nextDirection;
+	}
+
+	public void setNextDirection(Direction nextDirection) {
+		this.nextDirection = nextDirection;
 	}
 
 	public SimpleIntegerProperty getyPosition() {
