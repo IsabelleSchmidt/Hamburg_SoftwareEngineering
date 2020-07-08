@@ -3,12 +3,19 @@ package business.components;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleListProperty;
+
+
+/**
+ * 
+ * Street
+ *
+ */
 public abstract class Street {
 
-	// muss sich merken welche stra�e und wo es gesetzt wurde
-
 	private StreetType type;
-	protected int rotationCount = 0;
+	protected SimpleIntegerProperty rotationCount = new SimpleIntegerProperty();
 	protected List<Direction> directions = new ArrayList<>();
 
 	public void setType(StreetType type) {
@@ -20,4 +27,12 @@ public abstract class Street {
 	}
 
 	protected abstract void rotate();
+
+	public SimpleIntegerProperty getRotationCount() {
+		return rotationCount;
+	}
+
+	public void setRotationCount(SimpleIntegerProperty rotationCount) {
+		this.rotationCount = rotationCount;
+	}
 }

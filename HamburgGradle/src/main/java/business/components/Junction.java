@@ -12,13 +12,15 @@ public class Junction extends Street {
 	@Override
 	public void rotate() {
 
-		if (rotationCount < 3) {
-			rotationCount++;
+		if (rotationCount.get() < 3) {
+			rotationCount.set(rotationCount.get() + 1);
+			;
 		} else {
-			rotationCount = 0;
+			rotationCount.set(0);
+			;
 		}
 
-		switch (rotationCount) {
+		switch (rotationCount.get()) {
 		case 0:
 			directions.clear();
 			directions.add(Direction.DOWN);

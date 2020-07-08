@@ -4,41 +4,26 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
-
-import com.sun.glass.ui.Clipboard;
-
 import business.components.Crossing;
 import business.components.Curve;
-import business.components.Item;
 import business.components.Junction;
 import business.components.Straight;
 import business.components.Street;
+import business.components.Vehicle;
 import business.simulation.Grid;
-import business.simulation.Simulation;
-import javafx.animation.AnimationTimer;
 import javafx.animation.ParallelTransition;
-import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.beans.InvalidationListener;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyEvent;
@@ -47,26 +32,16 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class VerkehrssimulationController implements Initializable {
 
 	private static final int GRIDSIZE = 5;
-//TODO: private machen
-	MenuItem rightClickMenu;
-	ContextMenu contextMenu;
-	Simulation simulation;
-	Grid grid = new Grid(GRIDSIZE);
-
+	private Grid grid = new Grid(GRIDSIZE);
+	private ImageView[][] imageViewField;
 	private FileInputStream inputstream;
-	private Node car;
-
-	// @FXML
-	// private AnchorPane loadSimulationPane;
+	private HashMap<Vehicle, ImageView> vehicles = new HashMap<>();
 
 	@FXML
 	private Button loadiSimulationButton;
@@ -241,6 +216,8 @@ public class VerkehrssimulationController implements Initializable {
 			id = "Curve";
 		} else if (picked.getId().equals("StreetElementJunction")) {
 			id = "Junction";
+		} else if (picked.getId().equals("StreetElementCar")) {
+			id = "StreetElementCar";
 		}
 
 		Dragboard db = picked.startDragAndDrop(TransferMode.ANY);
@@ -270,7 +247,7 @@ public class VerkehrssimulationController implements Initializable {
 		double doubleX = event.getSceneX();
 		double doubleY = event.getSceneY();
 
-		System.out.println(doubleY + " " + doubleX);
+		// System.out.println(doubleY + " " + doubleX);
 
 		Integer cIndex = GridPane.getColumnIndex(node);
 		Integer rIndex = GridPane.getRowIndex(node);
@@ -279,38 +256,37 @@ public class VerkehrssimulationController implements Initializable {
 
 		// grid.placeStreet(new, x, y);
 
-		System.out.println(x + " " + y);
-
 		Image img = event.getDragboard().getImage();
 		String id = event.getDragboard().getString();
-
-		((ImageView) event.getPickResult().getIntersectedNode()).setImage(img); // TODO: Listener schreiben, hierfür
-																				// muss ein listener auf das Grid
-																				// laufen, welches dann an der passenden
-																				// Stelle ein Bild platziert
 
 		switch (id) {
 		case "Straight":
 
-			grid.placeStreet(new Straight(), x, y);
+			Straight straight = new Straight();
+			grid.placeStreet(straight, x, y);
+			initStreetListener(straight);
 
 			break;
 
 		case "Curve":
-			grid.placeStreet(new Curve(), x, y);
+
+			Curve curve = new Curve();
+			grid.placeStreet(curve, x, y);
+			initStreetListener(curve);
 			break;
 
 		case "Junction":
-			grid.placeStreet(new Junction(), x, y);
+			Junction junction = new Junction();
+			grid.placeStreet(junction, x, y);
+			initStreetListener(junction);
 			break;
 
 		case "Crossing":
-			grid.placeStreet(new Crossing(), x, y);
+			Crossing crossing = new Crossing();
+			grid.placeStreet(crossing, x, y);
 			break;
 
 		case "StreetElementCar":
-
-			grid.placeStreet(new Crossing(), x, y);
 
 			try {
 				inputstream = new FileInputStream("smallcar.png");
@@ -320,23 +296,63 @@ public class VerkehrssimulationController implements Initializable {
 			}
 
 			Image image = new Image(inputstream);
-			car = new ImageView(image);
-			simulationGrid.getChildren().add(car);
-			
+			ImageView vehicleImgV = new ImageView(image);
+			simulationGrid.getChildren().add(vehicleImgV);
+			Vehicle v = new Vehicle(x * 100, y * 100, grid);
+			vehicleImgV.setOnMouseClicked(e -> {
+				if (e.getButton() == MouseButton.PRIMARY) {
+					v.rotate();
+				}
+			});
+
+			vehicleImgV.setFitHeight(24);
+			vehicleImgV.setFitWidth(24);
+
+			vehicleImgV.setX(v.getxPostion().get() - vehicleImgV.getFitHeight() / 2);
+			vehicleImgV.setY(v.getyPosition().get() - vehicleImgV.getFitWidth() / 2);
+			vehicles.put(v, vehicleImgV);
+			initVehicleListener(v);
+
 			break;
 
 		default:
 			break;
 		}
+		System.out.println(id);
+		if (!id.equals("StreetElementCar")) {
+			((ImageView) event.getPickResult().getIntersectedNode()).setImage(img);
+		}
 
-		initStreetListener(grid.getStreet(x, y));
+		// TODO: Listener schreiben, hierfür
+		// muss ein listener auf das Grid
+		// laufen, welches dann an der passenden
+		// Stelle ein Bild platziert
+
+	}
+
+	private void initVehicleListener(Vehicle v) {
+
+		// TODO: Bild verschieben
+
+		v.getxPostion().addListener((observable, oldValue, newV) -> {
+			ImageView imageV = vehicles.get(v);
+			imageV.setX(v.getxPostionInt() - imageV.getFitWidth() / 2);
+		});
+
+		v.getyPosition().addListener((observable, oldValue, newV) -> {
+			ImageView imageV = vehicles.get(v);
+			imageV.setY(v.getyPositionInt() - imageV.getFitHeight() / 2);
+
+		});
 
 	}
 
 	private void initStreetListener(Street street) {
 
-		// TODO: Listener schreiben, der auf Listener hört. street.rotation.addListener,
-		// so etwa
+		street.getRotationCount().addListener((observable, oldValue, newV) -> {
+			System.out.println(newV);
+
+		});
 
 	}
 
@@ -351,13 +367,9 @@ public class VerkehrssimulationController implements Initializable {
 		int y = rIndex == null ? 0 : rIndex;
 
 		if (event.getButton() == MouseButton.PRIMARY) {
-			int counter = event.getClickCount(); // TODO: Clicks müssen schnell hintereinander erfolgen, sonst keine
-
-			System.out.println(grid.getStreet(x, y).getClass().toString());
 
 			Street street = grid.getStreet(x, y);
-
-			// TODO: gucken ob anzahl mit Drehungen stimmt.
+			// Vehicle car = new Vehicle(x, y, grid)
 
 			if (street.getClass().toString().contains("Straight")) {
 				((Straight) street).rotate();
@@ -369,12 +381,11 @@ public class VerkehrssimulationController implements Initializable {
 				((Crossing) street).rotate();
 			}
 
-			node.setRotate(90 * counter); // TODO: Ersetzen durch listener
-			counter = 0;
+			node.setRotate(90 * street.getRotationCount().get());
 		}
 
 		if (event.getButton() == MouseButton.SECONDARY) {
-
+//TODO: gleiches spiel für remove machen
 			ImageView img = (ImageView) node;
 			img.setImage(null);
 
@@ -451,40 +462,14 @@ public class VerkehrssimulationController implements Initializable {
 
 	@FXML
 	void startSimulation(ActionEvent event) {
+		for (Vehicle v : vehicles.keySet()) {
 
-//		event.getScreenX(), event.getScreenY()
+			v.drive();
 
-//		Group group = new Group();
-//		Path path = new Path();
-
-//		path.getElements().add(new MoveTo(20, 20));
-//		path.getElements().add(new CubicCurveTo(30, 30, 30, 100, 500,100));
-//		path.getElements().add(new CubicCurveTo(200, 500, 110, 240, 10, 240));
-//		path.setOpacity(0.1);
-//
-//		group.getChildren().add(path);
-//		group.getChildren().add(car);
-//		simulationGrid.getChildren().add(group);
-//
-//		PathTransition pathTransition = new PathTransition();
-//
-//		pathTransition.setDuration(Duration.seconds(8.0));
-//		pathTransition.setDelay(Duration.seconds(.5));
-//		pathTransition.setPath(path);
-//		pathTransition.setNode(car);
-//		pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-//		pathTransition.setCycleCount(Timeline.INDEFINITE);
-//		pathTransition.setAutoReverse(true);
-//		pathTransition.play();
-
+		}
 	}
 
 	public void scrollToMenu() {
-		/*
-		 * TranslateTransition tr1 = new TranslateTransition();
-		 * tr1.setDuration(Duration.millis(300)); tr1.setToX(0); tr1.setToY(-700);
-		 * tr1.setNode(loadSimulationPane);
-		 */
 		TranslateTransition tr3 = new TranslateTransition();
 		tr3.setDuration(Duration.millis(300));
 		tr3.setToX(0);
@@ -507,11 +492,6 @@ public class VerkehrssimulationController implements Initializable {
 		tr1.setToX(0);
 		tr1.setToY(-700);
 		tr1.setNode(menuPane);
-		/*
-		 * TranslateTransition tr3 = new TranslateTransition();
-		 * tr3.setDuration(Duration.millis(300)); tr3.setToX(0); tr3.setToY(-700);
-		 * tr3.setNode(loadSimulationPane);
-		 */
 		TranslateTransition tr2 = new TranslateTransition();
 		tr2.setDuration(Duration.millis(300));
 		tr2.setFromX(0);
@@ -523,39 +503,57 @@ public class VerkehrssimulationController implements Initializable {
 		pt.play();
 	}
 
-	public VerkehrssimulationController() {
-		rightClickMenu = new MenuItem("Element löschen");
-		contextMenu = new ContextMenu();
-		simulation = new Simulation();
-
-//		aktGrid.xPos.addListener(new ChangeListener<Number>() {
-//
-//			@Override
-//			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-//				System.out.println("Neuer Wert Property: " + newValue);
-//				
-//			}
-//			
-//		});
-//
-//		aktGrid.yPos.addListener(new ChangeListener<Number>() {
-//
-//			@Override
-//			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-//				System.out.println("Neuer Wert Property: " + newValue);
-//				
-//			}
-//			
-//		});
-		// initialize();
-	}
-
-	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+
+		grid.getGrid().addListener((observable, oldValue, newV) -> {
+
+			for (int i = 0; i < GRIDSIZE; i++) {
+				for (int j = 0; j < GRIDSIZE; j++) {
+
+					// String[][] streets = new String[GRIDSIZE][GRIDSIZE];
+
+					if (newV[i][j] != null) {
+
+						System.out.println(newV[i][j].getClass().toString());
+
+					}
+
+				}
+			}
+
+		});
+
+//		for (int y = 0, k = 0; y <= GRIDSIZE - 1; y++) {
+//			for (int x = 0; x <= GRIDSIZE - 1; x++) {
+//				ImageView iv = (ImageView) simulationGrid.getChildren().get(k); // TODO: parsing mistake
+//
+//				imageViewField[x][y] = (ImageView) iv;
+//				k++;
+//			}
+//		}
 
 		// TODO: hier den Listener aufs Grid, wenn ein neues Image ins Feld platziert
 		// wird
 		// grid.getCurren..
+
+		grid.getGrid().addListener((observable, oldV, newV) -> {
+
+			int x = 0, y = 0;
+			for (Street[] newRow : newV) {
+				for (Street newCol : newRow) {
+					Street[] oldRow = oldV[x];
+					Street oldCol = oldRow[y];
+					if (newCol != oldCol) {
+
+						break;
+					}
+					y++;
+				}
+				y = 0;
+				x++;
+			}
+
+		});
 
 	}
 
