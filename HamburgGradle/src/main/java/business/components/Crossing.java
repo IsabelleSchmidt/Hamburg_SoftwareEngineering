@@ -16,5 +16,8 @@ public class Crossing extends Street {
 	public void rotate() {
 
 	}
-
+	@Override
+	public String toString() {
+		return "Crossing";
+	}
 }

@@ -13,6 +13,8 @@ import javafx.beans.property.SimpleListProperty;
  */
 public abstract class Street {
 
+	
+
 	//private StreetType type;
 	protected SimpleIntegerProperty rotationCount = new SimpleIntegerProperty();
 	protected List<Direction> directions = new ArrayList<>();

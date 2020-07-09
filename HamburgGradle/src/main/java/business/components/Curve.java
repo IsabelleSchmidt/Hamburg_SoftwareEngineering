@@ -44,4 +44,10 @@ public class Curve extends Street {
 
 	}
 
+	@Override
+	public String toString() {
+		return "Curve";
+	}
+	
+
 }

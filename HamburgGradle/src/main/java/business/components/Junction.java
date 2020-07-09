@@ -4,9 +4,9 @@ public class Junction extends Street {
 
 	public Junction() {
 
-		directions.add(Direction.LEFT);
-		directions.add(Direction.RIGHT);
 		directions.add(Direction.DOWN);
+		directions.add(Direction.RIGHT);
+		directions.add(Direction.LEFT);
 	}
 
 	@Override
@@ -50,6 +50,10 @@ public class Junction extends Street {
 			break;
 		}
 
+	}
+	@Override
+	public String toString() {
+		return "Junction";
 	}
 
 }
