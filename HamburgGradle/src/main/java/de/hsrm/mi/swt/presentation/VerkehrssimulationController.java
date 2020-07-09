@@ -31,6 +31,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -54,6 +56,7 @@ public class VerkehrssimulationController implements Initializable {
 	private HashMap<Vehicle, ImageView> vehicles = new HashMap<>();
 	private Timeline timelineTrafficLights, timelineVehicle;
 	private int playbackspeed = 5;
+	private int streetCounter;
 
 	// TODO: Label in der GUI oben rechts füllen
 	// 1. mit Anzahl an Fahrzeugen auf GUI
@@ -214,6 +217,9 @@ public class VerkehrssimulationController implements Initializable {
 
 	@FXML
 	private Button functionButtonQuit;
+
+	@FXML
+	private Button functionButtonHelp;
 
 	@FXML
 	void getGridPosition(MouseEvent event) {
@@ -400,6 +406,7 @@ public class VerkehrssimulationController implements Initializable {
 		if (!id.contains(("TrafficLight"))) {
 			if (!id.equals("StreetElementCar")) {
 				((ImageView) event.getPickResult().getIntersectedNode()).setImage(img);
+				streetCounter++;
 			}
 
 		}
@@ -496,17 +503,29 @@ public class VerkehrssimulationController implements Initializable {
 	void endSimulation(ActionEvent event) {
 		timelineVehicle.stop();
 		timelineTrafficLights.stop();
+
+		StreetElementCar.setDisable(false);
+		StreetElementCrossing.setDisable(false);
+		StreetElementCurve.setDisable(false);
+		StreetElementJunction.setDisable(false);
+		StreetElementStraight.setDisable(false);
+		StreetElementTrafficLight.setDisable(false);
 	}
 
 	@FXML
 	void increaseSpeed(ActionEvent event) {
-		playbackspeed++;
-		timelineVehicle.stop();
-		timelineVehicle.setRate(playbackspeed);
-		timelineVehicle.play();
-		timelineTrafficLights.stop();
-		timelineTrafficLights.setRate(playbackspeed);
-		timelineTrafficLights.play();
+
+		if (playbackspeed < 10) {
+			playbackspeed++;
+			timelineVehicle.stop();
+			timelineVehicle.setRate(playbackspeed);
+			timelineVehicle.play();
+			timelineTrafficLights.stop();
+			timelineTrafficLights.setRate(playbackspeed);
+			timelineTrafficLights.play();
+			showInfoLabelThree.setText("Abspielgeschwindkeit: " + playbackspeed);
+		}
+
 	}
 
 	@FXML
@@ -520,6 +539,7 @@ public class VerkehrssimulationController implements Initializable {
 			timelineTrafficLights.stop();
 			timelineTrafficLights.setRate(playbackspeed);
 			timelineTrafficLights.play();
+			showInfoLabelThree.setText("Abspielgeschwindkeit: " + playbackspeed);
 		}
 
 	}
@@ -564,13 +584,15 @@ public class VerkehrssimulationController implements Initializable {
 
 	}
 
-	private Node getNodeFromGridPane(AnchorPane imageGrid, int col, int row) {
-		for (Node node : imageGrid.getChildren()) {
-			if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
-				return (ImageView) node;
-			}
-		}
-		return null;
+	@FXML
+	void sendHelp(ActionEvent event) {
+
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Bedienungsanleitung");
+		alert.setHeaderText("Das Programm ist wie folgt zu Benutzen:");
+		alert.setContentText(
+				"Elemente per Drag and Drop platzieren und per linkem Mausklick drehen. Elemente mit Rechsklick entfernen. Wenn alle Elemente platziert, dann Start drücken.");
+		alert.showAndWait();
 	}
 
 	@FXML
@@ -668,6 +690,21 @@ public class VerkehrssimulationController implements Initializable {
 
 		timelineTrafficLights.play();
 
+		showInfoLabelOne.setText("Anzahl Autos: " + vehicles.size());
+		showInfoLabelTwo.setText("Anzahl Straßen: " + streetCounter);
+		showInfoLabelThree.setText("Abspielgeschwindkeit: " + playbackspeed);
+
+		controllButtonIncrease.setDisable(false);
+		controllButtonDrecease.setDisable(false);
+		controllButtonStop.setDisable(false);
+
+		StreetElementCar.setDisable(true);
+		StreetElementCrossing.setDisable(true);
+		StreetElementCurve.setDisable(true);
+		StreetElementJunction.setDisable(true);
+		StreetElementStraight.setDisable(true);
+		StreetElementTrafficLight.setDisable(true);
+
 	}
 
 	public void scrollToMenu() {
@@ -705,6 +742,10 @@ public class VerkehrssimulationController implements Initializable {
 	}
 
 	public void initialize(URL arg0, ResourceBundle arg1) {
+
+		controllButtonIncrease.setDisable(true);
+		controllButtonDrecease.setDisable(true);
+		controllButtonStop.setDisable(true);
 
 //		grid.getGrid().addListener((observable, oldV, newV) -> {
 //
