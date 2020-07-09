@@ -2,9 +2,11 @@ package business.components;
 
 public class Straight extends Street {
 
+	
+
 	public Straight() {
-		directions.add(Direction.UP);
 		directions.add(Direction.DOWN);
+		directions.add(Direction.UP);
 	}
 
 	@Override
@@ -43,6 +45,10 @@ public class Straight extends Street {
 			break;
 		}
 
+	}
+	@Override
+	public String toString() {
+		return "Straight";
 	}
 
 }
