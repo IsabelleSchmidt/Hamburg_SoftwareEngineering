@@ -1,6 +1,7 @@
 package business.components;
 
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.image.ImageView;
 
 public class Trafficlight {
 
@@ -55,6 +56,99 @@ public class Trafficlight {
 
 	public Direction getDirection() {
 		return direction;
+	}
+
+	public ImageView loadImage(Street street, TrafficlightStatus trafficlightStatus) {
+
+		ImageView image = null;
+
+		if (trafficlightStatus.equals(TrafficlightStatus.GREEN)) {
+
+			if (street.toString().contains(("Straight"))) {
+				image = new ImageView("/gerade_gruen.png");
+				image.setFitHeight(100);
+				image.setFitWidth(100);
+
+			}
+
+			if (street.toString().contains(("Crossing"))) {
+				image = new ImageView("/kreuzung_situation1.png");
+				image.setFitHeight(100);
+				image.setFitWidth(100);
+			}
+
+			if (street.toString().contains(("Junction"))) {
+				image = new ImageView("/abzweigung_ampel_gruen.png");
+				image.setFitHeight(100);
+				image.setFitWidth(100);
+			}
+
+			if (street.toString().contains(("Curve"))) {
+				image = new ImageView("/kurve.png");
+				image.setFitHeight(100);
+				image.setFitWidth(100);
+			}
+		}
+
+		if (trafficlightStatus.equals(TrafficlightStatus.RED)) {
+
+			if (street.toString().contains(("Straight"))) {
+				image = new ImageView("/gerade_rot.png");
+				image.setFitHeight(100);
+				image.setFitWidth(100);
+
+			}
+
+			if (street.toString().contains(("Crossing"))) {
+				image = new ImageView("/kreuzung_situation2.png");
+				image.setFitHeight(100);
+				image.setFitWidth(100);
+			}
+
+			if (street.toString().contains(("Junction"))) {
+				image = new ImageView("abzweigung_ampel_2_gruen.png");
+				image.setFitHeight(100);
+				image.setFitWidth(100);
+			}
+
+			if (street.toString().contains(("Curve"))) {
+				image = new ImageView("/kurve.png");
+				image.setFitHeight(100);
+				image.setFitWidth(100);
+			}
+		}
+
+		if (trafficlightStatus.equals(TrafficlightStatus.ORANGE)
+				|| trafficlightStatus.equals(TrafficlightStatus.ORANGEGREEN)) {
+
+			if (street.toString().contains(("Straight"))) {
+				image = new ImageView("/gerade_gelb.png");
+				image.setFitHeight(100);
+				image.setFitWidth(100);
+
+			}
+
+			if (street.toString().contains(("Crossing"))) {
+				image = new ImageView("/kreuzung_orange.jpeg");
+				image.setFitHeight(100);
+				image.setFitWidth(100);
+			}
+
+			if (street.toString().contains(("Junction"))) {
+				image = new ImageView("/abzweigung_oragne.jpeg");
+				image.setFitHeight(100);
+				image.setFitWidth(100);
+			}
+
+			if (street.toString().contains(("Curve"))) {
+				image = new ImageView("/kurve.png");
+				image.setFitHeight(100);
+				image.setFitWidth(100);
+			}
+		}
+
+		return image;
+
 	}
 
 }

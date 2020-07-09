@@ -6,13 +6,13 @@ import javafx.beans.property.SimpleIntegerProperty;
 public class Simulation {
 
 	private static final int SPEEDFACTOR = 1;
-	private SimpleDoubleProperty playbackSpeed;
+	private SimpleIntegerProperty playbackSpeed;
 
 	public Simulation() {
-		playbackSpeed = new SimpleDoubleProperty();
+		playbackSpeed = new SimpleIntegerProperty();
 	}
 
-	public SimpleDoubleProperty getPlaybackSpeed() {
+	public SimpleIntegerProperty getPlaybackSpeed() {
 		return playbackSpeed;
 	}
 

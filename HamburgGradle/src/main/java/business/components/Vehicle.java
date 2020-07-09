@@ -11,6 +11,7 @@ public class Vehicle {
 	private Direction direction = Direction.RIGHT;
 	private Direction nextDirection = null;
 	private SimpleIntegerProperty xPosition, yPosition;
+	private SimpleObjectProperty<Direction> directionProperty;
 	private Grid grid;
 	private SimpleIntegerProperty rotationCount;
 	private final int XRIGHTSTART = 90;
@@ -27,10 +28,11 @@ public class Vehicle {
 		rotationCount = new SimpleIntegerProperty();
 		rotationCount.set(0);
 
-		xPosition = new SimpleIntegerProperty();
-		yPosition = new SimpleIntegerProperty();
-		xPosition.set(x + XRIGHTSTART);
-		yPosition.set(y + YRIGHTSTART);
+		xPosition = new SimpleIntegerProperty(x + XRIGHTSTART);
+		yPosition = new SimpleIntegerProperty(y + YRIGHTSTART);
+
+		directionProperty = new SimpleObjectProperty<>(Direction.RIGHT);
+
 		this.grid = grid;
 
 	}
@@ -100,7 +102,6 @@ public class Vehicle {
 		default:
 			break;
 		}
-
 	}
 
 	public void drive() {
@@ -150,6 +151,14 @@ public class Vehicle {
 
 		return null;
 
+	}
+
+	public SimpleObjectProperty<Direction> getDirectionProperty() {
+		return directionProperty;
+	}
+
+	public void setDirectionProperty(SimpleObjectProperty<Direction> directionProperty) {
+		this.directionProperty = directionProperty;
 	}
 
 }

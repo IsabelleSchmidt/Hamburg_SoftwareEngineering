@@ -25,6 +25,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.ParallelTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -49,12 +50,14 @@ public class VerkehrssimulationController implements Initializable {
 
 	private static final int GRIDSIZE = 5;
 	private Grid grid = new Grid(GRIDSIZE);
-	private Simulation simulation;
-	// private ImageView[][] imageViewField;
 	private FileInputStream inputstream;
 	private HashMap<Vehicle, ImageView> vehicles = new HashMap<>();
-	private Timeline timeline, trafficLightTimeline;
-	private AnimationTimer timer, trafficLightTimer;
+	private Timeline timelineTrafficLights, timelineVehicle;
+	private int playbackspeed = 5;
+
+	// TODO: Label in der GUI oben rechts füllen
+	// 1. mit Anzahl an Fahrzeugen auf GUI
+	// 2. mit Zeit, seit dem die Animation gestartet wurde
 
 	@FXML
 	private Button loadiSimulationButton;
@@ -79,6 +82,9 @@ public class VerkehrssimulationController implements Initializable {
 
 	@FXML
 	private AnchorPane simulationGrid;
+
+	@FXML
+	private GridPane simulationGridPane;
 
 	@FXML
 	private ImageView ImageGrid_0_0;
@@ -218,31 +224,36 @@ public class VerkehrssimulationController implements Initializable {
 	void handleDragDetection(MouseEvent event) {
 
 		String id = null;
-		ImageView picked = (ImageView) event.getPickResult().getIntersectedNode();
+		try {
+			ImageView picked = (ImageView) event.getPickResult().getIntersectedNode();
 
-		if (picked.getId().equals("StreetElementStraight")) {
-			id = "Straight";
-		} else if (picked.getId().equals("StreetElementCrossing")) {
-			id = "Crossing";
-		} else if (picked.getId().equals("StreetElementCurve")) {
-			id = "Curve";
-		} else if (picked.getId().equals("StreetElementJunction")) {
-			id = "Junction";
-		} else if (picked.getId().equals("StreetElementCar")) {
-			id = "StreetElementCar";
-		} else if (picked.getId().equals("StreetElementTrafficLight")) {
-			id = "TrafficLight";
+			if (picked.getId().equals("StreetElementStraight")) {
+				id = "Straight";
+			} else if (picked.getId().equals("StreetElementCrossing")) {
+				id = "Crossing";
+			} else if (picked.getId().equals("StreetElementCurve")) {
+				id = "Curve";
+			} else if (picked.getId().equals("StreetElementJunction")) {
+				id = "Junction";
+			} else if (picked.getId().equals("StreetElementCar")) {
+				id = "StreetElementCar";
+			} else if (picked.getId().equals("StreetElementTrafficLight")) {
+				id = "TrafficLight";
+			}
+
+			Dragboard db = picked.startDragAndDrop(TransferMode.ANY);
+			ClipboardContent cb = new ClipboardContent();
+
+			cb.putImage(picked.getImage());
+			cb.putString(id);
+
+			db.setContent(cb);
+
+			event.consume();
+
+		} catch (Exception e) {
+			System.out.println("Wohl abgerutscht beim platzieren - halb so wild. Einfach weitermachen.");
 		}
-
-		Dragboard db = picked.startDragAndDrop(TransferMode.ANY);
-		ClipboardContent cb = new ClipboardContent();
-
-		cb.putImage(picked.getImage());
-		cb.putString(id);
-
-		db.setContent(cb);
-
-		event.consume();
 
 	}
 
@@ -261,19 +272,13 @@ public class VerkehrssimulationController implements Initializable {
 		double doubleX = event.getSceneX();
 		double doubleY = event.getSceneY();
 
-		// System.out.println(doubleY + " " + doubleX);
-
 		Integer cIndex = GridPane.getColumnIndex(node);
 		Integer rIndex = GridPane.getRowIndex(node);
 		int x = cIndex == null ? 0 : cIndex;
 		int y = rIndex == null ? 0 : rIndex;
 
-		// grid.placeStreet(new, x, y);
-
 		Image img = event.getDragboard().getImage();
 		String id = event.getDragboard().getString();
-
-		// System.out.println(id);
 
 		switch (id) {
 		case "Straight":
@@ -303,15 +308,57 @@ public class VerkehrssimulationController implements Initializable {
 			break;
 
 		case "TrafficLight":
+
 			List<Trafficlight> trafficlights = new ArrayList<>();
+
 			for (Direction d : grid.getStreet(x, y).getDirections()) {
+
 				Trafficlight trafficlight = new Trafficlight(d);
+
+				if (d.equals(Direction.UP) || d.equals(Direction.DOWN)) {
+					trafficlight.switchLight();
+					trafficlight.switchLight();
+				}
 				trafficlights.add(trafficlight);
 			}
 
 			grid.getStreet(x, y).addTrafficlights(trafficlights);
 
-			// gui anzeigen
+			Street street = grid.getStreet(x, y);
+
+			if (street.toString().contains("Straight")) {
+
+				ImageView image = new ImageView("/gerade_rot.png");
+				image.setFitHeight(100);
+				image.setFitWidth(100);
+				image.setRotate(90 * grid.getStreet(x, y).getRotationCount().doubleValue());
+				simulationGridPane.add(image, x, y);
+
+			} else if (street.toString().contains("Crossing")) {
+
+				ImageView image = new ImageView("/kreuzung_situation1.png");
+				image.setFitHeight(100);
+				image.setFitWidth(100);
+				image.setRotate(90 * grid.getStreet(x, y).getRotationCount().doubleValue());
+				simulationGridPane.add(image, x, y);
+
+			} else if (street.toString().contains("Junction")) {
+
+				ImageView image = new ImageView("/abzweigung_ampel_2_gruen.png");
+				image.setFitHeight(100);
+				image.setFitWidth(100);
+				image.setRotate(90 * grid.getStreet(x, y).getRotationCount().doubleValue());
+				simulationGridPane.add(image, x, y);
+
+			} else if (street.toString().contains("Curve")) {
+
+				ImageView image = new ImageView("/gerade_rot.png");
+				image.setFitHeight(100);
+				image.setFitWidth(100);
+				image.setRotate(90 * grid.getStreet(x, y).getRotationCount().doubleValue());
+				simulationGridPane.add(image, x, y);
+
+			}
 
 			break;
 
@@ -349,9 +396,12 @@ public class VerkehrssimulationController implements Initializable {
 		default:
 			break;
 		}
-		// System.out.println(id);
-		if (!id.equals("StreetElementCar")) {
-			((ImageView) event.getPickResult().getIntersectedNode()).setImage(img);
+
+		if (!id.contains(("TrafficLight"))) {
+			if (!id.equals("StreetElementCar")) {
+				((ImageView) event.getPickResult().getIntersectedNode()).setImage(img);
+			}
+
 		}
 
 		// TODO: Listener schreiben, hierfür
@@ -369,11 +419,6 @@ public class VerkehrssimulationController implements Initializable {
 			ImageView imageV = vehicles.get(v);
 			imageV.setX(v.getXPosition() - imageV.getFitWidth() / 2);
 
-//			if (newV.equals(400)) {
-//				v.setDirection(Direction.DOWN);
-//			}
-
-			// System.out.println("Gridpos x: " + newV.intValue() / 100);
 		});
 
 		v.getYCarProperty().addListener((observable, oldValue, newV) -> {
@@ -393,32 +438,21 @@ public class VerkehrssimulationController implements Initializable {
 
 	}
 
-	private void initSimulationListener(Simulation simulation) {
-
-		simulation.getPlaybackSpeed().addListener((observable, oldValue, newV) -> {
-
-			double currentRate = timeline.getRate();
-			System.out.println(currentRate);
-			timeline.setRate(newV.doubleValue()); // speed up count down
-			System.out.println(timeline.getRate());
-
-		});
-	}
-
 	@FXML
 	void onMouseClickedGrid(MouseEvent event) {
 
-		Node node = event.getPickResult().getIntersectedNode();
+		ImageView img = (ImageView) event.getPickResult().getIntersectedNode();
 
-		Integer cIndex = GridPane.getColumnIndex(node);
-		Integer rIndex = GridPane.getRowIndex(node);
+		System.out.println(img);
+
+		Integer cIndex = GridPane.getColumnIndex(img);
+		Integer rIndex = GridPane.getRowIndex(img);
 		int x = cIndex == null ? 0 : cIndex;
 		int y = rIndex == null ? 0 : rIndex;
 
 		if (event.getButton() == MouseButton.PRIMARY) {
 
 			Street street = grid.getStreet(x, y);
-			// Vehicle car = new Vehicle(x, y, grid)
 
 			if (street.getClass().toString().contains("Straight")) {
 				((Straight) street).rotate();
@@ -430,14 +464,13 @@ public class VerkehrssimulationController implements Initializable {
 				((Crossing) street).rotate();
 			}
 
-			node.setRotate(90 * street.getRotationCount().get());
+			img.setRotate(90 * street.getRotationCount().get());
 		}
 
 		if (event.getButton() == MouseButton.SECONDARY) {
-//TODO: gleiches spiel für remove machen
-			ImageView img = (ImageView) node;
-			img.setImage(null);
 
+			grid.removeItem(x, y);
+			img.setImage(null);
 		}
 
 	}
@@ -461,18 +494,34 @@ public class VerkehrssimulationController implements Initializable {
 
 	@FXML
 	void endSimulation(ActionEvent event) {
-		// TODO: timer.stop(), alles in der Business auf null.
+		timelineVehicle.stop();
+		timelineTrafficLights.stop();
 	}
 
 	@FXML
 	void increaseSpeed(ActionEvent event) {
-		simulation.increasePlaybackSpeed();
-
+		playbackspeed++;
+		timelineVehicle.stop();
+		timelineVehicle.setRate(playbackspeed);
+		timelineVehicle.play();
+		timelineTrafficLights.stop();
+		timelineTrafficLights.setRate(playbackspeed);
+		timelineTrafficLights.play();
 	}
 
 	@FXML
 	void decreaseSpeed(ActionEvent event) {
-		simulation.decreasePlaybackSpeed();
+
+		if (playbackspeed > 1) {
+			playbackspeed--;
+			timelineVehicle.stop();
+			timelineVehicle.setRate(playbackspeed);
+			timelineVehicle.play();
+			timelineTrafficLights.stop();
+			timelineTrafficLights.setRate(playbackspeed);
+			timelineTrafficLights.play();
+		}
+
 	}
 
 	@FXML
@@ -487,7 +536,7 @@ public class VerkehrssimulationController implements Initializable {
 
 	@FXML
 	void pauseSimulation(ActionEvent event) {
-		timer.stop();
+		// TODO: RAUSWERFEN
 	}
 
 	@FXML
@@ -502,7 +551,7 @@ public class VerkehrssimulationController implements Initializable {
 
 	@FXML
 	void remove(ActionEvent event) {
-
+		// RAUSWERFEN
 	}
 
 	@FXML
@@ -515,82 +564,65 @@ public class VerkehrssimulationController implements Initializable {
 
 	}
 
+	private Node getNodeFromGridPane(AnchorPane imageGrid, int col, int row) {
+		for (Node node : imageGrid.getChildren()) {
+			if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+				return (ImageView) node;
+			}
+		}
+		return null;
+	}
+
 	@FXML
 	void startSimulation(ActionEvent event) {
 
 		TriggerPoints trigger = new TriggerPoints();
-		simulation = new Simulation();
-		initSimulationListener(simulation);
-		double playbackSpeed = simulation.getPlaybackSpeed().get();
 
-		timeline = new Timeline();
-		timeline.setCycleCount(Timeline.INDEFINITE);
-		timeline.setAutoReverse(true);
+		Duration durationVehilce = Duration.millis(50);
+		KeyFrame vehicleFrame = new KeyFrame(durationVehilce, ev -> {
+			for (Vehicle car : vehicles.keySet()) {
+				boolean drive = true;
 
-		timer = new AnimationTimer() {
+				int x = car.getXPosition();
+				int y = car.getYPosition();
 
-			@Override
-			public void handle(long now) {
+				if (trigger.isTriggered(car, x, y)) {
+					car.setNextDirection(
+							trigger.chooseRandomDirection(grid.getStreet(x / 100, y / 100), car.getDirection()));
 
-				for (Vehicle car : vehicles.keySet()) {
-					boolean drive = true;
+					for (Trafficlight t : grid.getStreet(x / 100, y / 100).getTrafficlights()) {
 
-					// trigger.chooseRandomDirection(street, streetDirection, car.getDirection());
-					// street wie folgt ermitteln: akutellen Koorditen/100, damit im grid x,y
-					// raussuchen und direction ziehen
-
-					/*
-					 * Um Abbiegung zu erkennen, folgendes:
-					 * 
-					 * - triggerPunkt festlegen - ermittel das Stück Straße unter dir - in welche
-					 * Richtungen kannst du dort abbiegen? - aus welcher Richtung kommst du? Die
-					 * muss abgezogen werden - nächste richtungsänderung speichern - Richtung ändern
-					 * an stelle x/y -
-					 * 
-					 */
-
-					int x = car.getXPosition();
-					int y = car.getYPosition();
-
-					if (trigger.isTriggered(car, x, y)) {
-						car.setNextDirection(
-								trigger.chooseRandomDirection(grid.getStreet(x / 100, y / 100), car.getDirection()));
-
-						for (Trafficlight t : grid.getStreet(x / 100, y / 100).getTrafficlights()) {
-
-							if (t.getDirection().equals(car.tellOposite(car.getDirection()))) {
-
-								if (!(t.getStatus().get() == TrafficlightStatus.GREEN)) {
-
-									drive = false;
-								}
+						if (t.getDirection().equals(car.tellOposite(car.getDirection()))) {
+							if (!(t.getStatus().get() == TrafficlightStatus.GREEN)) {
+								drive = false;
 							}
 						}
-
 					}
+				}
 
-					if (trigger.canTurnTo(car) == car.getNextDirection()) {
-						car.setDirection(car.getNextDirection());
+				if (trigger.canTurnTo(car) == car.getNextDirection()) {
 
-					}
-
-					if (drive) {
-						car.drive();
-					}
+					car.setDirection(car.getNextDirection());
 
 				}
-			}
-		};
 
-//		Duration duration = Duration.millis(10);
-//		KeyFrame keyFrame = new KeyFrame(duration);
-//
-//		timeline.getKeyFrames().add(keyFrame);
-//		timeline.play();s
-		timer.start();
+				if (drive) {
+					car.drive();
+				}
+			}
+		});
+
+		timelineVehicle = new Timeline();
+		timelineVehicle.getKeyFrames().add(vehicleFrame);
+		timelineVehicle.setCycleCount(Timeline.INDEFINITE);
+		timelineVehicle.setRate(playbackspeed);
+
+		timelineVehicle.play();
 
 		Duration durationTrafficLight = Duration.millis(3000);
 		KeyFrame trafficLightFrame = new KeyFrame(durationTrafficLight, e -> {
+
+			ImageView newStreetImg = null;
 
 			for (int x = 0; x < GRIDSIZE; x++) {
 				for (int y = 0; y < GRIDSIZE; y++) {
@@ -598,20 +630,43 @@ public class VerkehrssimulationController implements Initializable {
 						for (Trafficlight t : grid.getStreet(x, y).getTrafficlights()) {
 
 							t.switchLight();
-							// System.out.println(t.getStatus());
+
+							Street street = grid.getStreet(x, y);
+
+							if (t.getTrafficlightStatus().equals(TrafficlightStatus.GREEN)) {
+								newStreetImg = t.loadImage(street, t.getTrafficlightStatus());
+								newStreetImg.setRotate(90 * grid.getStreet(x, y).getRotationCount().doubleValue());
+								simulationGridPane.add(newStreetImg, x, y);
+							}
+
+							if (t.getTrafficlightStatus().equals(TrafficlightStatus.ORANGE)) {
+								newStreetImg = t.loadImage(street, t.getTrafficlightStatus());
+								newStreetImg.setRotate(90 * grid.getStreet(x, y).getRotationCount().doubleValue());
+								simulationGridPane.add(newStreetImg, x, y);
+							}
+
+							if (t.getTrafficlightStatus().equals(TrafficlightStatus.ORANGEGREEN)) {
+								newStreetImg = t.loadImage(street, t.getTrafficlightStatus());
+								newStreetImg.setRotate(90 * grid.getStreet(x, y).getRotationCount().doubleValue());
+								simulationGridPane.add(newStreetImg, x, y);
+							}
+
+							if (t.getTrafficlightStatus().equals(TrafficlightStatus.RED)) {
+								newStreetImg = t.loadImage(street, t.getTrafficlightStatus());
+								newStreetImg.setRotate(90 * grid.getStreet(x, y).getRotationCount().doubleValue());
+								simulationGridPane.add(newStreetImg, x, y);
+							}
 						}
 					}
-
 				}
-
 			}
 		});
 
-		timeline = new Timeline();
-		timeline.getKeyFrames().add(trafficLightFrame);
-		timeline.setCycleCount(Timeline.INDEFINITE);
+		timelineTrafficLights = new Timeline();
+		timelineTrafficLights.getKeyFrames().add(trafficLightFrame);
+		timelineTrafficLights.setCycleCount(Timeline.INDEFINITE);
 
-		timeline.play();
+		timelineTrafficLights.play();
 
 	}
 
@@ -651,55 +706,24 @@ public class VerkehrssimulationController implements Initializable {
 
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
-//		grid.getGrid().addListener((observable, oldValue, newV) -> {
+//		grid.getGrid().addListener((observable, oldV, newV) -> {
 //
-//			for (int i = 0; i < GRIDSIZE; i++) {
-//				for (int j = 0; j < GRIDSIZE; j++) {
+//			int x = 0, y = 0;
+//			for (Street[] newRow : newV) {
+//				for (Street newCol : newRow) {
+//					Street[] oldRow = oldV[x];
+//					Street oldCol = oldRow[y];
+//					if (newCol != oldCol) {
 //
-//					// String[][] streets = new String[GRIDSIZE][GRIDSIZE];
-//
-//					if (newV[i][j] != null) {
-//
-//						//System.out.println(newV[i][j].getClass().toString());
-//
+//						break;
 //					}
-//
+//					y++;
 //				}
+//				y = 0;
+//				x++;
 //			}
 //
 //		});
-
-//		for (int y = 0, k = 0; y <= GRIDSIZE - 1; y++) {
-//			for (int x = 0; x <= GRIDSIZE - 1; x++) {
-//				ImageView iv = (ImageView) simulationGrid.getChildren().get(k); // TODO: parsing mistake
-//
-//				imageViewField[x][y] = (ImageView) iv;
-//				k++;
-//			}
-//		}
-
-		// TODO: hier den Listener aufs Grid, wenn ein neues Image ins Feld platziert
-		// wird
-		// grid.getCurren..
-
-		grid.getGrid().addListener((observable, oldV, newV) -> {
-
-			int x = 0, y = 0;
-			for (Street[] newRow : newV) {
-				for (Street newCol : newRow) {
-					Street[] oldRow = oldV[x];
-					Street oldCol = oldRow[y];
-					if (newCol != oldCol) {
-
-						break;
-					}
-					y++;
-				}
-				y = 0;
-				x++;
-			}
-
-		});
 
 	}
 

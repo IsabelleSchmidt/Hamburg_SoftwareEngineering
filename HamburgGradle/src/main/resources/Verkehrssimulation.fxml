@@ -89,7 +89,7 @@
                            <children>
                               <AnchorPane fx:id="simulationGrid" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: grey;" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <children>
-                                    <GridPane prefHeight="500.0" prefWidth="567.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <GridPane fx:id="simulationGridPane" prefHeight="500.0" prefWidth="567.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
                                           <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
