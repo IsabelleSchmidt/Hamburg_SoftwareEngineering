@@ -78,7 +78,7 @@ public class Trafficlight {
 			}
 
 			if (street.toString().contains(("Junction"))) {
-				image = new ImageView("/abzweigung_ampel_gruen.png");
+				image = new ImageView("abzweigung_ampel_2_gruen.png");
 				image.setFitHeight(100);
 				image.setFitWidth(100);
 			}
@@ -106,7 +106,8 @@ public class Trafficlight {
 			}
 
 			if (street.toString().contains(("Junction"))) {
-				image = new ImageView("abzweigung_ampel_2_gruen.png");
+				image = new ImageView("/abzweigung_ampel_gruen.png");
+				
 				image.setFitHeight(100);
 				image.setFitWidth(100);
 			}

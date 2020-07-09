@@ -138,9 +138,9 @@ public class VerkehrssimulationController implements Initializable {
 	void handleDragDetection(MouseEvent event) {
 
 		String id = null;
-		
+
 		try {
-			
+
 			ImageView picked = (ImageView) event.getPickResult().getIntersectedNode();
 
 			if (picked.getId().equals("StreetElementStraight")) {
@@ -345,10 +345,10 @@ public class VerkehrssimulationController implements Initializable {
 
 	}
 
+	//TODO: Braucht man dich noch?
 	private void initStreetListener(Street street) {
 
 		street.getRotationCount().addListener((observable, oldValue, newV) -> {
-			System.out.println(newV);
 
 		});
 
@@ -359,7 +359,6 @@ public class VerkehrssimulationController implements Initializable {
 
 		ImageView img = (ImageView) event.getPickResult().getIntersectedNode();
 
-		System.out.println(img);
 
 		Integer cIndex = GridPane.getColumnIndex(img);
 		Integer rIndex = GridPane.getRowIndex(img);
@@ -534,6 +533,8 @@ public class VerkehrssimulationController implements Initializable {
 						for (Trafficlight t : grid.getStreet(x, y).getTrafficlights()) {
 
 							t.switchLight();
+							
+							//TODO: Fehler in der Junction Grafik, steht bei Grün, fährt bei Rot
 
 							Street street = grid.getStreet(x, y);
 
