@@ -273,7 +273,7 @@ public class VerkehrssimulationController implements Initializable {
 		Image img = event.getDragboard().getImage();
 		String id = event.getDragboard().getString();
 
-		System.out.println(id);
+		// System.out.println(id);
 
 		switch (id) {
 		case "Straight":
@@ -330,6 +330,7 @@ public class VerkehrssimulationController implements Initializable {
 			simulationGrid.getChildren().add(vehicleImgV);
 			Vehicle v = new Vehicle(x * 100, y * 100, grid);
 			vehicleImgV.setOnMouseClicked(e -> {
+
 				if (e.getButton() == MouseButton.PRIMARY) {
 					v.rotate();
 				}
@@ -533,6 +534,7 @@ public class VerkehrssimulationController implements Initializable {
 
 				for (Vehicle car : vehicles.keySet()) {
 					boolean drive = true;
+
 					// trigger.chooseRandomDirection(street, streetDirection, car.getDirection());
 					// street wie folgt ermitteln: akutellen Koorditen/100, damit im grid x,y
 					// raussuchen und direction ziehen
@@ -596,7 +598,7 @@ public class VerkehrssimulationController implements Initializable {
 						for (Trafficlight t : grid.getStreet(x, y).getTrafficlights()) {
 
 							t.switchLight();
-							System.out.println(t.getStatus());
+							// System.out.println(t.getStatus());
 						}
 					}
 

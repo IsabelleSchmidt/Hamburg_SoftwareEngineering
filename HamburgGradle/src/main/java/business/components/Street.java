@@ -13,21 +13,18 @@ import javafx.beans.property.SimpleListProperty;
  */
 public abstract class Street {
 
-	private StreetType type;
-	protected boolean hasTrafficLights;
+	//private StreetType type;
 	protected SimpleIntegerProperty rotationCount = new SimpleIntegerProperty();
 	protected List<Direction> directions = new ArrayList<>();
 	protected List<Trafficlight> trafficlights = new ArrayList<>();
 
-	public void setType(StreetType type) {
-		this.type = type;
-	}
-
-	public StreetType getType() {
-		return type;
-	}
-
-	protected abstract void rotate();
+//	public void setType(StreetType type) {
+//		this.type = type;
+//	}
+//
+//	public StreetType getType() {
+//		return type;
+//	}
 
 	public SimpleIntegerProperty getRotationCount() {
 		return rotationCount;
@@ -49,5 +46,7 @@ public abstract class Street {
 	public List<Trafficlight> getTrafficlights() {
 		return trafficlights;
 	}
+
+	protected abstract void rotate();
 
 }

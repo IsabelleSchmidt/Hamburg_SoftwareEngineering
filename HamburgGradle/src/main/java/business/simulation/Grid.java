@@ -30,6 +30,7 @@ public class Grid {
 
 	}
 
+	//TODO: Fragen, warum kopie
 	public void placeStreet(Street street, int posX, int posY) {
 		Street[][] tempGrid = new Street[gridsize][gridsize];
 		for (int y = 0; y <= gridsize - 1; y++) {
