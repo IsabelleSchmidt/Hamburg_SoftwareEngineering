@@ -1,17 +1,18 @@
 package business.simulation;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class Simulation {
 
 	private static final int SPEEDFACTOR = 1;
-	private SimpleIntegerProperty playbackSpeed;
+	private SimpleDoubleProperty playbackSpeed;
 
 	public Simulation() {
-		playbackSpeed = new SimpleIntegerProperty();
+		playbackSpeed = new SimpleDoubleProperty();
 	}
 
-	public SimpleIntegerProperty getPlaybackSpeed() {
+	public SimpleDoubleProperty getPlaybackSpeed() {
 		return playbackSpeed;
 	}
 
@@ -20,9 +21,9 @@ public class Simulation {
 	}
 
 	public void decreasePlaybackSpeed() {
-		if (playbackSpeed.get() > 1) {
+		
 			playbackSpeed.set(playbackSpeed.get() - SPEEDFACTOR);
-		}
+		
 
 	}
 

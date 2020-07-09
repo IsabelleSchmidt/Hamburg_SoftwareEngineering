@@ -4,7 +4,9 @@ import java.awt.Point;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle;
 import business.components.Crossing;
 import business.components.Curve;
@@ -12,6 +14,8 @@ import business.components.Direction;
 import business.components.Junction;
 import business.components.Straight;
 import business.components.Street;
+import business.components.Trafficlight;
+import business.components.TrafficlightStatus;
 import business.components.TriggerPoints;
 import business.components.Vehicle;
 import business.simulation.Grid;
@@ -49,8 +53,8 @@ public class VerkehrssimulationController implements Initializable {
 	// private ImageView[][] imageViewField;
 	private FileInputStream inputstream;
 	private HashMap<Vehicle, ImageView> vehicles = new HashMap<>();
-	private Timeline timeline;
-	private AnimationTimer timer;
+	private Timeline timeline, trafficLightTimeline;
+	private AnimationTimer timer, trafficLightTimer;
 
 	@FXML
 	private Button loadiSimulationButton;
@@ -214,7 +218,6 @@ public class VerkehrssimulationController implements Initializable {
 	void handleDragDetection(MouseEvent event) {
 
 		String id = null;
-
 		ImageView picked = (ImageView) event.getPickResult().getIntersectedNode();
 
 		if (picked.getId().equals("StreetElementStraight")) {
@@ -227,6 +230,8 @@ public class VerkehrssimulationController implements Initializable {
 			id = "Junction";
 		} else if (picked.getId().equals("StreetElementCar")) {
 			id = "StreetElementCar";
+		} else if (picked.getId().equals("StreetElementTrafficLight")) {
+			id = "TrafficLight";
 		}
 
 		Dragboard db = picked.startDragAndDrop(TransferMode.ANY);
@@ -268,6 +273,8 @@ public class VerkehrssimulationController implements Initializable {
 		Image img = event.getDragboard().getImage();
 		String id = event.getDragboard().getString();
 
+		System.out.println(id);
+
 		switch (id) {
 		case "Straight":
 
@@ -295,6 +302,19 @@ public class VerkehrssimulationController implements Initializable {
 			grid.placeStreet(crossing, x, y);
 			break;
 
+		case "TrafficLight":
+			List<Trafficlight> trafficlights = new ArrayList<>();
+			for (Direction d : grid.getStreet(x, y).getDirections()) {
+				Trafficlight trafficlight = new Trafficlight(d);
+				trafficlights.add(trafficlight);
+			}
+
+			grid.getStreet(x, y).addTrafficlights(trafficlights);
+
+			// gui anzeigen
+
+			break;
+
 		case "StreetElementCar":
 
 			try {
@@ -318,8 +338,8 @@ public class VerkehrssimulationController implements Initializable {
 			vehicleImgV.setFitHeight(24);
 			vehicleImgV.setFitWidth(24);
 
-			vehicleImgV.setX(v.getxPostion().get() - vehicleImgV.getFitHeight() / 2);
-			vehicleImgV.setY(v.getyPosition().get() - vehicleImgV.getFitWidth() / 2);
+			vehicleImgV.setX(v.getXCarProperty().get() - vehicleImgV.getFitHeight() / 2);
+			vehicleImgV.setY(v.getYCarProperty().get() - vehicleImgV.getFitWidth() / 2);
 			vehicles.put(v, vehicleImgV);
 			initVehicleListener(v);
 
@@ -344,20 +364,20 @@ public class VerkehrssimulationController implements Initializable {
 
 		// TODO: Bild verschieben
 
-		v.getxPostion().addListener((observable, oldValue, newV) -> {
+		v.getXCarProperty().addListener((observable, oldValue, newV) -> {
 			ImageView imageV = vehicles.get(v);
-			imageV.setX(v.getxPostionInt() - imageV.getFitWidth() / 2);
+			imageV.setX(v.getXPosition() - imageV.getFitWidth() / 2);
 
 //			if (newV.equals(400)) {
 //				v.setDirection(Direction.DOWN);
 //			}
 
-			//System.out.println("Gridpos x: " + newV.intValue() / 100);
+			// System.out.println("Gridpos x: " + newV.intValue() / 100);
 		});
 
-		v.getyPosition().addListener((observable, oldValue, newV) -> {
+		v.getYCarProperty().addListener((observable, oldValue, newV) -> {
 			ImageView imageV = vehicles.get(v);
-			imageV.setY(v.getyPositionInt() - imageV.getFitHeight() / 2);
+			imageV.setY(v.getYPosition() - imageV.getFitHeight() / 2);
 
 		});
 
@@ -375,7 +395,12 @@ public class VerkehrssimulationController implements Initializable {
 	private void initSimulationListener(Simulation simulation) {
 
 		simulation.getPlaybackSpeed().addListener((observable, oldValue, newV) -> {
-			System.out.println(newV);
+
+			double currentRate = timeline.getRate();
+			System.out.println(currentRate);
+			timeline.setRate(newV.doubleValue()); // speed up count down
+			System.out.println(timeline.getRate());
+
 		});
 	}
 
@@ -435,7 +460,7 @@ public class VerkehrssimulationController implements Initializable {
 
 	@FXML
 	void endSimulation(ActionEvent event) {
-
+		// TODO: timer.stop(), alles in der Business auf null.
 	}
 
 	@FXML
@@ -461,7 +486,7 @@ public class VerkehrssimulationController implements Initializable {
 
 	@FXML
 	void pauseSimulation(ActionEvent event) {
-
+		timer.stop();
 	}
 
 	@FXML
@@ -495,7 +520,7 @@ public class VerkehrssimulationController implements Initializable {
 		TriggerPoints trigger = new TriggerPoints();
 		simulation = new Simulation();
 		initSimulationListener(simulation);
-		int playbackSpeed = simulation.getPlaybackSpeed().get();
+		double playbackSpeed = simulation.getPlaybackSpeed().get();
 
 		timeline = new Timeline();
 		timeline.setCycleCount(Timeline.INDEFINITE);
@@ -507,7 +532,7 @@ public class VerkehrssimulationController implements Initializable {
 			public void handle(long now) {
 
 				for (Vehicle car : vehicles.keySet()) {
-
+					boolean drive = true;
 					// trigger.chooseRandomDirection(street, streetDirection, car.getDirection());
 					// street wie folgt ermitteln: akutellen Koorditen/100, damit im grid x,y
 					// raussuchen und direction ziehen
@@ -522,31 +547,69 @@ public class VerkehrssimulationController implements Initializable {
 					 * 
 					 */
 
-
-					int x = car.getxPostionInt();
-					int y = car.getyPositionInt();
+					int x = car.getXPosition();
+					int y = car.getYPosition();
 
 					if (trigger.isTriggered(car, x, y)) {
-						car.setNextDirection(trigger.chooseRandomDirection(grid.getStreet(x / 100, y / 100), car.getDirection()));
+						car.setNextDirection(
+								trigger.chooseRandomDirection(grid.getStreet(x / 100, y / 100), car.getDirection()));
+
+						for (Trafficlight t : grid.getStreet(x / 100, y / 100).getTrafficlights()) {
+
+							if (t.getDirection().equals(car.tellOposite(car.getDirection()))) {
+
+								if (!(t.getStatus().get() == TrafficlightStatus.GREEN)) {
+
+									drive = false;
+								}
+							}
+						}
 
 					}
 
 					if (trigger.canTurnTo(car) == car.getNextDirection()) {
 						car.setDirection(car.getNextDirection());
+
 					}
 
-					car.drive();
+					if (drive) {
+						car.drive();
+					}
 
 				}
 			}
 		};
 
-		Duration duration = Duration.millis(1000 * playbackSpeed);
-		KeyFrame keyFrame = new KeyFrame(duration);
-
-		timeline.getKeyFrames().add(keyFrame);
-		timeline.play();
+//		Duration duration = Duration.millis(10);
+//		KeyFrame keyFrame = new KeyFrame(duration);
+//
+//		timeline.getKeyFrames().add(keyFrame);
+//		timeline.play();s
 		timer.start();
+
+		Duration durationTrafficLight = Duration.millis(3000);
+		KeyFrame trafficLightFrame = new KeyFrame(durationTrafficLight, e -> {
+
+			for (int x = 0; x < GRIDSIZE; x++) {
+				for (int y = 0; y < GRIDSIZE; y++) {
+					if (grid.getStreet(x, y) != null) {
+						for (Trafficlight t : grid.getStreet(x, y).getTrafficlights()) {
+
+							t.switchLight();
+							System.out.println(t.getStatus());
+						}
+					}
+
+				}
+
+			}
+		});
+
+		timeline = new Timeline();
+		timeline.getKeyFrames().add(trafficLightFrame);
+		timeline.setCycleCount(Timeline.INDEFINITE);
+
+		timeline.play();
 
 	}
 
@@ -586,23 +649,23 @@ public class VerkehrssimulationController implements Initializable {
 
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
-		grid.getGrid().addListener((observable, oldValue, newV) -> {
-
-			for (int i = 0; i < GRIDSIZE; i++) {
-				for (int j = 0; j < GRIDSIZE; j++) {
-
-					// String[][] streets = new String[GRIDSIZE][GRIDSIZE];
-
-					if (newV[i][j] != null) {
-
-						//System.out.println(newV[i][j].getClass().toString());
-
-					}
-
-				}
-			}
-
-		});
+//		grid.getGrid().addListener((observable, oldValue, newV) -> {
+//
+//			for (int i = 0; i < GRIDSIZE; i++) {
+//				for (int j = 0; j < GRIDSIZE; j++) {
+//
+//					// String[][] streets = new String[GRIDSIZE][GRIDSIZE];
+//
+//					if (newV[i][j] != null) {
+//
+//						//System.out.println(newV[i][j].getClass().toString());
+//
+//					}
+//
+//				}
+//			}
+//
+//		});
 
 //		for (int y = 0, k = 0; y <= GRIDSIZE - 1; y++) {
 //			for (int x = 0; x <= GRIDSIZE - 1; x++) {

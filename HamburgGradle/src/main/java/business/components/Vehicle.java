@@ -37,7 +37,7 @@ public class Vehicle {
 
 	// TODO: sauber bennen
 
-	public SimpleIntegerProperty getxPostion() {
+	public SimpleIntegerProperty getXCarProperty() {
 		return xPosition;
 	}
 
@@ -49,15 +49,15 @@ public class Vehicle {
 		this.nextDirection = nextDirection;
 	}
 
-	public SimpleIntegerProperty getyPosition() {
+	public SimpleIntegerProperty getYCarProperty() {
 		return yPosition;
 	}
 
-	public int getxPostionInt() {
+	public int getXPosition() {
 		return xPosition.get();
 	}
 
-	public int getyPositionInt() {
+	public int getYPosition() {
 		return yPosition.get();
 	}
 
@@ -103,14 +103,6 @@ public class Vehicle {
 
 	}
 
-	public Color getColor() {
-		return color;
-	}
-
-	public Direction getDirection() {
-		return direction;
-	}
-
 	public void drive() {
 		switch (direction) {
 		case UP:
@@ -128,6 +120,36 @@ public class Vehicle {
 		default:
 			break;
 		}
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public Direction getDirection() {
+		return direction;
+	}
+
+	public Direction tellOposite(Direction streetDirection) {
+
+		if (streetDirection.equals(Direction.UP)) {
+			return Direction.DOWN;
+		}
+
+		if (streetDirection.equals(Direction.DOWN)) {
+			return Direction.UP;
+		}
+
+		if (streetDirection.equals(Direction.LEFT)) {
+			return Direction.RIGHT;
+		}
+
+		if (streetDirection.equals(Direction.RIGHT)) {
+			return Direction.LEFT;
+		}
+
+		return null;
+
 	}
 
 }

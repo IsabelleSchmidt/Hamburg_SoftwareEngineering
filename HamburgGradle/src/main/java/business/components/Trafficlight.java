@@ -1,35 +1,60 @@
 package business.components;
 
-/**
- * 
- * extended Street, weil die Ampel teil der Straße ist. Quasi nur eine besondere
- * Art von Straße
- *
- */
+import javafx.beans.property.SimpleObjectProperty;
+
 public class Trafficlight {
 
-	private String status;
-	private int duration;
+	private SimpleObjectProperty<TrafficlightStatus> status;
+	private Direction direction;
 
-	public Trafficlight() {
-		this.status = status;
-		this.duration = duration;
+	public Trafficlight(Direction d) {
+		status = new SimpleObjectProperty<TrafficlightStatus>(TrafficlightStatus.RED);
+		direction = d;
 	}
 
-	public String getStatus() {
+	public TrafficlightStatus switchLight() {
+
+		switch (status.get()) {
+
+		case RED:
+			status.set(TrafficlightStatus.ORANGEGREEN);
+			return status.get();
+
+		case ORANGEGREEN:
+			status.set(TrafficlightStatus.GREEN);
+			return status.get();
+
+		case GREEN:
+			status.set(TrafficlightStatus.ORANGE);
+			return status.get();
+
+		case ORANGE:
+			status.set(TrafficlightStatus.RED);
+			return status.get();
+
+		default:
+			break;
+		}
+
+		return status.get();
+
+	}
+
+	public TrafficlightStatus reset() {
+		status.set(TrafficlightStatus.RED);
+		return status.get();
+	}
+
+	public TrafficlightStatus getTrafficlightStatus() {
+		return status.get();
+	}
+
+	public SimpleObjectProperty<TrafficlightStatus> getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public int getDuration() {
-		return duration;
-	}
-
-	public void setDuration(int duration) {
-		this.duration = duration;
+	public Direction getDirection() {
+		return direction;
 	}
 
 }

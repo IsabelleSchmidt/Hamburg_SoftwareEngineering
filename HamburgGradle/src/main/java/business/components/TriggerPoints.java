@@ -117,7 +117,7 @@ public class TriggerPoints {
 	public Direction canTurnTo(Vehicle vehicle) {
 
 		Direction direction = vehicle.getDirection();
-		Point carPoint = new Point(vehicle.getxPostionInt() % 100, vehicle.getyPositionInt() % 100);
+		Point carPoint = new Point(vehicle.getXPosition() % 100, vehicle.getYPosition() % 100);
 
 		switch (direction) {
 		case UP:
