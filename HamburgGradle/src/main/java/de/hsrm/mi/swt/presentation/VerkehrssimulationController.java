@@ -404,7 +404,7 @@ public class VerkehrssimulationController implements Initializable {
 		StreetElementJunction.setDisable(false);
 		StreetElementStraight.setDisable(false);
 		StreetElementTrafficLight.setDisable(false);
-		
+
 		controllButtonStart.setDisable(false);
 		controllButtonDrecease.setDisable(true);
 		controllButtonIncrease.setDisable(true);
@@ -444,11 +444,6 @@ public class VerkehrssimulationController implements Initializable {
 	}
 
 	@FXML
-	void loadSimulationFile(ActionEvent event) {
-		VerkehrssimulationMain.load();
-	}
-
-	@FXML
 	void newSimulation(ActionEvent event) {
 		scrollToSimulation();
 	}
@@ -461,11 +456,6 @@ public class VerkehrssimulationController implements Initializable {
 	@FXML
 	void quitSiumulation(ActionEvent event) {
 		System.exit(0);
-	}
-
-	@FXML
-	void safeSimulation(ActionEvent event) {
-		VerkehrssimulationMain.save();
 	}
 
 	@FXML
@@ -518,7 +508,7 @@ public class VerkehrssimulationController implements Initializable {
 				catch (Exception e) {
 
 					car.setDirection(trigger.tellOposite(car.getDirection()));
-					//Abfangen
+					// Abfangen
 
 				}
 

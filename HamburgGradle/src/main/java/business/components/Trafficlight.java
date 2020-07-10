@@ -7,7 +7,6 @@ public class Trafficlight {
 
 	private SimpleObjectProperty<TrafficlightStatus> status;
 	private Direction direction;
-
 	public Trafficlight(Direction d) {
 		status = new SimpleObjectProperty<TrafficlightStatus>(TrafficlightStatus.RED);
 		direction = d;
@@ -151,5 +150,4 @@ public class Trafficlight {
 		return image;
 
 	}
-
 }

@@ -13,20 +13,10 @@ import javafx.beans.property.SimpleListProperty;
  */
 public abstract class Street {
 
-	
-
-	//private StreetType type;
 	protected SimpleIntegerProperty rotationCount = new SimpleIntegerProperty();
 	protected List<Direction> directions = new ArrayList<>();
 	protected List<Trafficlight> trafficlights = new ArrayList<>();
 
-//	public void setType(StreetType type) {
-//		this.type = type;
-//	}
-//
-//	public StreetType getType() {
-//		return type;
-//	}
 
 	public SimpleIntegerProperty getRotationCount() {
 		return rotationCount;

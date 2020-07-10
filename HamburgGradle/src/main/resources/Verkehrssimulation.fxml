@@ -203,15 +203,11 @@
                                         <RowConstraints minHeight="10.0" prefHeight="250.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                                          <Button fx:id="functionButtonSafe" mnemonicParsing="false" onAction="#safeSimulation" prefHeight="40.0" prefWidth="85.0" text="Speichern" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                          <Button fx:id="functionButtonSafe" mnemonicParsing="false" prefHeight="40.0" prefWidth="85.0" text="Speichern" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                              <font>
                                                 <Font name="Roboto Bold" size="13.0" />
                                              </font></Button>
-                                          <Button fx:id="functioButtonLoad" mnemonicParsing="false" onAction="#loadSimulationFile" prefHeight="40.0" prefWidth="85.0" text="Laden" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                                             <font>
-                                                <Font name="Roboto Bold" size="13.0" />
-                                             </font></Button>
-                                          <Button fx:id="functionButtonMenuBack" mnemonicParsing="false" onAction="#backToMenu" prefHeight="40.0" prefWidth="85.0" text="Menü" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                          <Button fx:id="functionButtonMenuBack" mnemonicParsing="false" onAction="#backToMenu" prefHeight="40.0" prefWidth="85.0" text="Menü" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                              <font>
                                                 <Font name="Roboto Bold" size="13.0" />
                                              </font></Button>
@@ -219,7 +215,7 @@
                                              <font>
                                                 <Font name="Roboto Bold" size="13.0" />
                                              </font></Button>
-                                          <Button fx:id="functionButtonHelp" mnemonicParsing="false" onAction="#sendHelp" prefHeight="40.0" prefWidth="85.0" text="Hilfe" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+                                          <Button fx:id="functionButtonHelp" mnemonicParsing="false" onAction="#sendHelp" prefHeight="40.0" prefWidth="85.0" text="Hilfe" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
                                              <font>
                                                 <Font name="Roboto Bold" size="13.0" />
                                              </font>
@@ -260,11 +256,10 @@
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                       </columnConstraints>
                                       <rowConstraints>
-                                          <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="250.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="300.0" vgrow="SOMETIMES" />
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="150.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="200.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
                                           <Button fx:id="menuNewSimulationButton" maxWidth="250.0" mnemonicParsing="false" onAction="#newSimulation" prefHeight="50.0" text="Neue Simulation" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
@@ -272,12 +267,7 @@
                                                 <Font name="Roboto Bold" size="18.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="menuLoadSimulationButton" maxWidth="250.0" mnemonicParsing="false" onAction="#loadSimulationFile" prefHeight="50.0" text="Simulation laden" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-                                             <font>
-                                                <Font name="Roboto Bold" size="18.0" />
-                                             </font>
-                                          </Button>
-                                          <Button fx:id="quitSimulationButton" maxWidth="250.0" mnemonicParsing="false" onAction="#quitSimulation" prefHeight="50.0" text="Simulation beenden" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                                          <Button fx:id="quitSimulationButton" maxWidth="250.0" mnemonicParsing="false" onAction="#quitSimulation" prefHeight="50.0" text="Simulation beenden" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                              <font>
                                                 <Font name="Roboto Bold" size="18.0" />
                                              </font>
