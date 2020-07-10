@@ -470,7 +470,7 @@ public class VerkehrssimulationController implements Initializable {
 		alert.setTitle("Bedienungsanleitung");
 		alert.setHeaderText("Das Programm ist wie folgt zu Benutzen:");
 		alert.setContentText(
-				"Elemente per Drag and Drop platzieren und per linkem Mausklick drehen. Elemente mit Rechsklick entfernen. Wenn alle Elemente platziert, dann Start drücken.");
+				"Elemente per Drag and Drop platzieren und per linkem Mausklick drehen. Elemente mit Rechsklick entfernen. Wenn alle Elemente platziert, dann Start druecken.");
 		alert.showAndWait();
 	}
 
@@ -594,7 +594,7 @@ public class VerkehrssimulationController implements Initializable {
 		timelineTrafficLights.play();
 
 		showInfoLabelOne.setText("Anzahl Autos: " + vehicles.size());
-		showInfoLabelTwo.setText("Anzahl Straßen: " + streetCounter);
+		showInfoLabelTwo.setText("Anzahl Strassen: " + streetCounter);
 		showInfoLabelThree.setText("Abspielgeschwindkeit: " + playbackspeed);
 
 		controllButtonIncrease.setDisable(false);

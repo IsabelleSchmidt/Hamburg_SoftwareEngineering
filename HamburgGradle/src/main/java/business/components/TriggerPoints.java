@@ -52,43 +52,6 @@ public class TriggerPoints {
 
 		return directions.get(random.nextInt(directions.size()));
 
-//		if (street.toString().contains("Crossing")) {
-//
-//			do {
-//				Collections.shuffle(directions);
-//			} while (directions.get(0) == tellOposite(vehicleDirection));
-//
-//			vehicle.setNextDirection(directions.get(0));
-//
-//		} else if (street.toString().contains("Junction")) {
-//
-//			do {
-//				Collections.shuffle(street.getDirections());
-//			} while (tellOposite(vehicleDirection).equals(directions.get(0))
-//					&& directions.get(0).equals(vehicleDirection));
-//
-//			vehicle.setNextDirection(directions.get(0));
-//
-//		} else if (street.toString().contains("Straight")) {
-//
-//			// nichts, einfach weitermachen
-//
-//		} else if (street.toString().contains("Curve")) {
-//
-//			if (vehicleDirection.equals(Direction.DOWN) || vehicleDirection.equals(Direction.UP)) {
-//				do {
-//					Collections.shuffle(directions);
-//				} while (directions.get(0).equals(Direction.DOWN) || directions.get(0).equals(Direction.UP));
-//				vehicle.setNextDirection(directions.get(0));
-//
-//			} else if (vehicleDirection.equals(Direction.LEFT) || vehicleDirection.equals(Direction.RIGHT)) {
-//				do {
-//					Collections.shuffle(directions);
-//				} while (directions.get(0).equals(Direction.LEFT) || directions.get(0).equals(Direction.RIGHT));
-//				vehicle.setNextDirection(directions.get(0));
-//			}
-//
-//		}
 
 	}
 

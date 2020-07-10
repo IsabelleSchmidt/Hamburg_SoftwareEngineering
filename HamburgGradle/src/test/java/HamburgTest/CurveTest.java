@@ -10,6 +10,7 @@ import business.components.Curve;
 import business.components.Direction;
 
 public class CurveTest {
+	Curve curve = new Curve();
 	
 	@Before
 	public void setUp() {
@@ -17,10 +18,6 @@ public class CurveTest {
 	
 	@Test
 	public void rotateTest() {
-		
-		Curve curve = new Curve();
-//		int rotationCount = 1;
-		
 		assertEquals(curve.getDirections().get(0), Direction.DOWN);
 		assertEquals(curve.getDirections().get(1), Direction.RIGHT);
 		curve.rotate();
@@ -32,14 +29,6 @@ public class CurveTest {
 		curve.rotate();
 		assertEquals(curve.getDirections().get(0), Direction.UP);
 		assertEquals(curve.getDirections().get(1), Direction.RIGHT);
-		
-		
-//		assertEquals(curve.getDirections(), rotationCount);
-//		curve.rotate();
-//		assertEquals(curve.getDirections(), rotationCount);
-//		curve.rotate();
-		
-//		assertEquals(Direction.DOWN, );
 		
 	}
 	
