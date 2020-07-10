@@ -28,6 +28,13 @@ public class TriggerPoints {
 
 	}
 
+	/**
+	 * 
+	 * @param street           - bekommt eine Street übergeben, damit man die mögl.
+	 *                         Richtungen raussuchen kann
+	 * @param vehicleDirection - bekommt die aktuelle Fahrtrichtung mit
+	 * @return gibt eine zufällige Richtung zurück
+	 */
 	public Direction chooseRandomDirection(Street street, Direction vehicleDirection) {
 
 		Random random = new Random();
@@ -49,9 +56,15 @@ public class TriggerPoints {
 
 		return directions.get(random.nextInt(directions.size()));
 
-
 	}
 
+	/**
+	 * 
+	 * @param car - bekommt aktl. Vehicle übergeben
+	 * @param x   - bekommt dessen x Posiiton
+	 * @param y   - bekommt dessen y Position
+	 * @return - schlägt Alarm (return true), wenn x,y dem Trigger entsprechen
+	 */
 	public boolean isTriggered(Vehicle car, int x, int y) {
 
 		Point currentPoint = new Point(x % 100, y % 100);
@@ -73,6 +86,12 @@ public class TriggerPoints {
 		return false;
 	}
 
+	/**
+	 * 
+	 * @param vehicle - bekommt ein Vehicle übergeben
+	 * @return - gibt den Abbiegepunkt zurückt, damit das Auto nicht in den
+	 *         Gegenverkehr abbiegt
+	 */
 	public Direction canTurnTo(Vehicle vehicle) {
 
 		Direction direction = vehicle.getDirection();
@@ -131,6 +150,11 @@ public class TriggerPoints {
 
 	}
 
+	/**
+	 * 
+	 * @param streetDirection - bekommt eine Direction
+	 * @return nennt die Gegenüberliegende Richtung
+	 */
 	public Direction tellOposite(Direction streetDirection) {
 
 		if (streetDirection.equals(Direction.UP)) {

@@ -2,8 +2,9 @@ package business.components;
 
 public class Straight extends Street {
 
-	
-
+	/**
+	 * Hinzufügen der Richtungen, welche eine Street dieses Typen hat
+	 */
 	public Straight() {
 		directions.add(Direction.DOWN);
 		directions.add(Direction.UP);
@@ -46,6 +47,7 @@ public class Straight extends Street {
 		}
 
 	}
+
 	@Override
 	public String toString() {
 		return "Straight";

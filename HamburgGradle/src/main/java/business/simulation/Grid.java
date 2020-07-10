@@ -10,15 +10,6 @@ import javafx.beans.property.SimpleObjectProperty;
 
 public class Grid {
 
-	// properties x und y , gr��e wird von gui �bernommen, aufteilung...
-	// durch gui wenn nicht null in 2d array hier speichern mit namen und position
-	// oder Funktion wird in passende methode eingegeben die dann �ber die gui
-	// aufgerufen wird
-	// methode setGrid wird in gui aufgerufen und alle parameter mitgegeben um hier
-	// eine "Kopie" zu erstellen
-	// if equals curve -> placeCurve methode aufrufen
-	// remove methoden
-
 	private int gridsize;
 	private SimpleObjectProperty<Street[][]> grid;
 
@@ -30,7 +21,12 @@ public class Grid {
 
 	}
 
-	//TODO: Fragen, warum kopie
+	/**
+	 * 
+	 * @param street - bekommt ein Element vom Typ Street
+	 * @param posX   - bekommt die x Koordidate der Platzierung im Grid
+	 * @param posY   - bekommt die y Koordidate der Platzierung im Grid
+	 */
 	public void placeStreet(Street street, int posX, int posY) {
 		Street[][] tempGrid = new Street[gridsize][gridsize];
 		for (int y = 0; y <= gridsize - 1; y++) {
@@ -42,9 +38,12 @@ public class Grid {
 		grid.set(tempGrid);
 	}
 
+	/**
+	 * 
+	 * @param posX - bekommt die x Koordidate der Entferungn aus dem Grid
+	 * @param posY - bekommt die y Koordidate der Entferungn aus dem Grid
+	 */
 	public void removeItem(int posX, int posY) {
-
-		// TODO: bekommt x,y übergeben, um an der passenden Stelle zu entfernen
 
 		Street[][] tempGrid = new Street[gridsize][gridsize];
 		for (int y = 0; y <= gridsize - 1; y++) {
@@ -58,10 +57,20 @@ public class Grid {
 
 	}
 
+	/**
+	 * 
+	 * @return gibt das Grid als Property zurück mit dem Grid 
+	 */
 	public SimpleObjectProperty<Street[][]> getGrid() {
 		return grid;
 	}
 
+	/**
+	 * 
+	 * @param x - bekommt die x Koordidate für die gesuchte Street im Grid
+	 * @param y - bekommt die y Koordidate für die gesuchte Street im Grid
+	 * @return  - gibt das Street Element an der Stelle x,y im Grid
+	 */
 	public Street getStreet(int x, int y) {
 		return grid.get()[x][y];
 	}

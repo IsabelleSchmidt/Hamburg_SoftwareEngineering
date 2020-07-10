@@ -7,11 +7,17 @@ public class Trafficlight {
 
 	private SimpleObjectProperty<TrafficlightStatus> status;
 	private Direction direction;
+
 	public Trafficlight(Direction d) {
 		status = new SimpleObjectProperty<TrafficlightStatus>(TrafficlightStatus.RED);
 		direction = d;
 	}
 
+	/**
+	 * 
+	 * @return schaltet die Ampel durch und gibt den nachfolgenden Wert in der
+	 *         Schaltreihenfolge zurück
+	 */
 	public TrafficlightStatus switchLight() {
 
 		switch (status.get()) {
@@ -40,23 +46,47 @@ public class Trafficlight {
 
 	}
 
+	/**
+	 * 
+	 * @return Methode um die Ampel zu resetten
+	 */
 	public TrafficlightStatus reset() {
 		status.set(TrafficlightStatus.RED);
 		return status.get();
 	}
 
+	/**
+	 * 
+	 * @return - gibt den aktuellen TrafficlightStatus der Ampel zurück
+	 */
 	public TrafficlightStatus getTrafficlightStatus() {
 		return status.get();
 	}
 
+	/**
+	 * 
+	 * @return - gibt den aktuellen TrafficlightStatus der Ampel als Property zurück
+	 */
 	public SimpleObjectProperty<TrafficlightStatus> getStatus() {
 		return status;
 	}
 
+	/**
+	 * 
+	 * @return direction - gibt die Direction zurück
+	 */
 	public Direction getDirection() {
 		return direction;
 	}
 
+	/**
+	 * 
+	 * @param street             - bekommt eine Street übergeben, damit das passende
+	 *                           Bild geladen werden kann
+	 * @param trafficlightStatus - bekommt den Status mit, damit die passende Farbe
+	 *                           geladen werden kann
+	 * @return gibt das geladene Bild zurück
+	 */
 	public ImageView loadImage(Street street, TrafficlightStatus trafficlightStatus) {
 
 		ImageView image = null;
@@ -106,7 +136,7 @@ public class Trafficlight {
 
 			if (street.toString().contains(("Junction"))) {
 				image = new ImageView("/abzweigung_ampel_2_gruen.png");
-				
+
 				image.setFitHeight(100);
 				image.setFitWidth(100);
 			}

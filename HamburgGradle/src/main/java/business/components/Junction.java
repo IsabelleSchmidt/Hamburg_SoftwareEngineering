@@ -1,7 +1,10 @@
 package business.components;
 
 public class Junction extends Street {
-
+	
+	/**
+	 * Hinzufügen der Richtungen, welche eine Street dieses Typen hat
+	 */
 	public Junction() {
 
 		directions.add(Direction.DOWN);

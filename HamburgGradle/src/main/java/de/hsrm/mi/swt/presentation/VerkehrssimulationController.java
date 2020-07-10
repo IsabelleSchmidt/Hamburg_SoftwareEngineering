@@ -1,8 +1,5 @@
 package de.hsrm.mi.swt.presentation;
 
-import java.awt.Point;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +16,7 @@ import business.components.TrafficlightStatus;
 import business.components.TriggerPoints;
 import business.components.Vehicle;
 import business.simulation.Grid;
+import business.simulation.turnPactException;
 import javafx.animation.KeyFrame;
 import javafx.animation.ParallelTransition;
 import javafx.animation.Timeline;
@@ -35,7 +33,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
@@ -47,12 +44,12 @@ import javafx.util.Duration;
 public class VerkehrssimulationController implements Initializable {
 
 	private static final int GRIDSIZE = 5;
-	private Grid grid = new Grid(GRIDSIZE);
-	private FileInputStream inputstream;
-	private HashMap<Vehicle, ImageView> vehicles = new HashMap<>();
-	private Timeline timelineTrafficLights, timelineVehicle;
 	private int playbackspeed = 5;
 	private int streetCounter;
+
+	private Grid grid = new Grid(GRIDSIZE);
+	private HashMap<Vehicle, ImageView> vehicles = new HashMap<>();
+	private Timeline timelineTrafficLights, timelineVehicle;
 	private ImageView vehicleImgV;
 
 	@FXML
@@ -164,7 +161,6 @@ public class VerkehrssimulationController implements Initializable {
 
 			cb.putImage(picked.getImage());
 			cb.putString(id);
-
 			db.setContent(cb);
 
 			event.consume();
@@ -191,6 +187,7 @@ public class VerkehrssimulationController implements Initializable {
 
 		Integer cIndex = GridPane.getColumnIndex(node);
 		Integer rIndex = GridPane.getRowIndex(node);
+		
 		int x = cIndex == null ? 0 : cIndex;
 		int y = rIndex == null ? 0 : rIndex;
 
@@ -202,7 +199,6 @@ public class VerkehrssimulationController implements Initializable {
 
 			Straight straight = new Straight();
 			grid.placeStreet(straight, x, y);
-			initStreetListener(straight);
 
 			break;
 
@@ -210,13 +206,11 @@ public class VerkehrssimulationController implements Initializable {
 
 			Curve curve = new Curve();
 			grid.placeStreet(curve, x, y);
-			initStreetListener(curve);
 			break;
 
 		case "Junction":
 			Junction junction = new Junction();
 			grid.placeStreet(junction, x, y);
-			initStreetListener(junction);
 			break;
 
 		case "Crossing":
@@ -314,19 +308,10 @@ public class VerkehrssimulationController implements Initializable {
 				((ImageView) event.getPickResult().getIntersectedNode()).setImage(img);
 				streetCounter++;
 			}
-
 		}
-
-		// TODO: Listener schreiben, hierfür
-		// muss ein listener auf das Grid
-		// laufen, welches dann an der passenden
-		// Stelle ein Bild platziert
-
 	}
 
 	private void initVehicleListener(Vehicle v) {
-
-		// TODO: Bild verschieben
 
 		v.getXCarProperty().addListener((observable, oldValue, newV) -> {
 			ImageView imageV = vehicles.get(v);
@@ -339,20 +324,14 @@ public class VerkehrssimulationController implements Initializable {
 			imageV.setY(v.getYPosition() - imageV.getFitHeight() / 2);
 
 		});
-
-	}
-
-	// TODO: Braucht man dich noch?
-	private void initStreetListener(Street street) {
-
-		street.getRotationCount().addListener((observable, oldValue, newV) -> {
-
-		});
-
 	}
 
 	@FXML
 	void onMouseClickedGrid(MouseEvent event) {
+		
+		try {
+			
+		
 
 		ImageView img = (ImageView) event.getPickResult().getIntersectedNode();
 
@@ -382,6 +361,10 @@ public class VerkehrssimulationController implements Initializable {
 
 			grid.removeItem(x, y);
 			img.setImage(null);
+		}
+		
+		} catch (Exception e) {
+			System.out.println("Nur abgerutscht beim Klicken. Kann mal vorkommen.");
 		}
 
 	}
@@ -483,7 +466,10 @@ public class VerkehrssimulationController implements Initializable {
 				int y = car.getYPosition();
 
 				if (collisionCheck(vehicles.get(car), car.getDirection())) {
-					drive = false; // kollision nur in direktion checken
+					drive = false;
+					
+					//TODO: Exeption bei Abbiegepackt
+					
 				} else {
 					drive = true;
 				}
@@ -624,7 +610,7 @@ public class VerkehrssimulationController implements Initializable {
 
 			if (carDirection.equals(Direction.DOWN)) {
 				if (!carImg.equals(vehicles.get(v))) {
-					if (carImg.getBoundsInParent().intersects(v.getXCarProperty().get(), v.getYCarProperty().get() - 20,
+					if (carImg.getBoundsInParent().intersects(v.getXCarProperty().get(), v.getYCarProperty().get() - 15,
 							carImg.getFitHeight(), carImg.getFitWidth() / 2)) {
 
 						collisionDetected = true;
@@ -634,7 +620,7 @@ public class VerkehrssimulationController implements Initializable {
 
 			if (carDirection.equals(Direction.UP)) {
 				if (!carImg.equals(vehicles.get(v))) {
-					if (carImg.getBoundsInParent().intersects(v.getXCarProperty().get(), v.getYCarProperty().get() + 20,
+					if (carImg.getBoundsInParent().intersects(v.getXCarProperty().get(), v.getYCarProperty().get() + 15,
 							carImg.getFitHeight() / 2, 0)) {
 
 						collisionDetected = true;
@@ -644,7 +630,7 @@ public class VerkehrssimulationController implements Initializable {
 
 			if (carDirection.equals(Direction.LEFT)) {
 				if (!carImg.equals(vehicles.get(v))) {
-					if (carImg.getBoundsInParent().intersects(v.getXCarProperty().get() + 20, v.getYCarProperty().get(),
+					if (carImg.getBoundsInParent().intersects(v.getXCarProperty().get() + 25, v.getYCarProperty().get(),
 							carImg.getFitHeight() / 2, 0)) {
 
 						collisionDetected = true;
@@ -653,16 +639,13 @@ public class VerkehrssimulationController implements Initializable {
 			}
 			if (carDirection.equals(Direction.RIGHT)) {
 				if (!carImg.equals(vehicles.get(v))) {
-					if (carImg.getBoundsInParent().intersects(v.getXCarProperty().get() - 20, v.getYCarProperty().get(),
+					if (carImg.getBoundsInParent().intersects(v.getXCarProperty().get() - 25, v.getYCarProperty().get(),
 							carImg.getFitHeight() / 2, carImg.getFitWidth())) {
 
 						collisionDetected = true;
 					}
 				}
 			}
-
-//wichtig
-
 		}
 		return collisionDetected;
 	}
@@ -706,7 +689,7 @@ public class VerkehrssimulationController implements Initializable {
 		controllButtonIncrease.setDisable(true);
 		controllButtonDrecease.setDisable(true);
 		controllButtonStop.setDisable(true);
-
+		
 	}
 
 }

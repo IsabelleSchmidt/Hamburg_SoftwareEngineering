@@ -2,6 +2,9 @@ package business.components;
 
 public class Curve extends Street {
 
+	/**
+	 * Hinzufügen der Richtungen, welche eine Street dieses Typen hat
+	 */
 	public Curve() {
 		directions.add(Direction.DOWN);
 		directions.add(Direction.RIGHT);
@@ -11,7 +14,8 @@ public class Curve extends Street {
 	public void rotate() {
 
 		if (rotationCount.get() < 3) {
-			rotationCount.set(rotationCount.get()+1);;
+			rotationCount.set(rotationCount.get() + 1);
+			;
 		} else {
 			rotationCount.set(0);
 		}
@@ -48,6 +52,5 @@ public class Curve extends Street {
 	public String toString() {
 		return "Curve";
 	}
-	
 
 }

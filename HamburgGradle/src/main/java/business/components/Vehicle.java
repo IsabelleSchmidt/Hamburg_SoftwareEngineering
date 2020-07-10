@@ -1,13 +1,11 @@
 package business.components;
 
 import business.simulation.Grid;
-import javafx.animation.AnimationTimer;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 public class Vehicle {
 
-	private Color color;
 	private Direction direction = Direction.RIGHT;
 	private Direction nextDirection = null;
 	private SimpleIntegerProperty xPosition, yPosition;
@@ -23,6 +21,12 @@ public class Vehicle {
 	private final int XDOWNSTART = 33;
 	private final int YDOWNSTART = 90;
 
+	/**
+	 * 
+	 * @param x    - Startkoordidate auf einer Street
+	 * @param y    - Startkoordianate auf einer Street
+	 * @param grid - Grid mit allen Straßen
+	 */
 	public Vehicle(int x, int y, Grid grid) {
 
 		rotationCount = new SimpleIntegerProperty();
@@ -35,36 +39,6 @@ public class Vehicle {
 
 		this.grid = grid;
 
-	}
-
-	// TODO: sauber bennen
-
-	public SimpleIntegerProperty getXCarProperty() {
-		return xPosition;
-	}
-
-	public Direction getNextDirection() {
-		return nextDirection;
-	}
-
-	public void setNextDirection(Direction nextDirection) {
-		this.nextDirection = nextDirection;
-	}
-
-	public SimpleIntegerProperty getYCarProperty() {
-		return yPosition;
-	}
-
-	public int getXPosition() {
-		return xPosition.get();
-	}
-
-	public int getYPosition() {
-		return yPosition.get();
-	}
-
-	public void setDirection(Direction direction) {
-		this.direction = direction;
 	}
 
 	public void rotate() {
@@ -122,15 +96,12 @@ public class Vehicle {
 			break;
 		}
 	}
-
-	public Color getColor() {
-		return color;
-	}
-
-	public Direction getDirection() {
-		return direction;
-	}
-
+	
+/**
+ * 
+ * @param streetDirection - bekommt eine Direction übergeben
+ * @return - gibt die Gegenüberliegende Direction zurück
+ */
 	public Direction tellOposite(Direction streetDirection) {
 
 		if (streetDirection.equals(Direction.UP)) {
@@ -153,18 +124,89 @@ public class Vehicle {
 
 	}
 
+	/**
+	 * 
+	 * @return - gibt die aktuelle X Position des Fahrzeugs als property
+	 */
+	public SimpleIntegerProperty getXCarProperty() {
+		return xPosition;
+	}
+
+	/**
+	 * 
+	 * @return yPosition - gibt die aktuelle Y Position als property
+	 */
+	public SimpleIntegerProperty getYCarProperty() {
+		return yPosition;
+	}
+
+	/**
+	 * 
+	 * @return - gibt die nächste Richtung
+	 */
+	public Direction getNextDirection() {
+		return nextDirection;
+	}
+
+	/**
+	 * 
+	 * @param nextDirection - um die nächste direction zu setzen
+	 */
+	public void setNextDirection(Direction nextDirection) {
+		this.nextDirection = nextDirection;
+	}
+
+	public void setDirection(Direction direction) {
+		this.direction = direction;
+	}
+
+	/**
+	 * 
+	 * @return - gibt Direction zurück
+	 */
+	public Direction getDirection() {
+		return direction;
+	}
+
+	/**
+	 * 
+	 * @return xPosition - gibt die aktuelle xPosition zurück
+	 */
+	public int getXPosition() {
+		return xPosition.get();
+	}
+
+	/**
+	 * 
+	 * @return - gibt yPosition zurück
+	 */
+	public int getYPosition() {
+		return yPosition.get();
+	}
+
+	/**
+	 * 
+	 * @return - gibt die Direction als property zurück
+	 */
 	public SimpleObjectProperty<Direction> getDirectionProperty() {
 		return directionProperty;
 	}
 
+	/**
+	 * 
+	 * @param directionProperty - property zum setzen einer Direction
+	 */
 	public void setDirectionProperty(SimpleObjectProperty<Direction> directionProperty) {
 		this.directionProperty = directionProperty;
 	}
 
+	
+	/**
+	 * 
+	 * @return gibt die Anzahl an Street Rotationen zurück
+	 */
 	public SimpleIntegerProperty getRotationCount() {
 		return rotationCount;
 	}
-	
-	
 
 }
