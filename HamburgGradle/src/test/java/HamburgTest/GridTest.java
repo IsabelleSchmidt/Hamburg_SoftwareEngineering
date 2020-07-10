@@ -14,9 +14,11 @@ import business.components.Street;
 import business.simulation.Grid;
 
 public class GridTest {
+	Grid grid = new Grid(5);
 
 	@Before
 	public void setUp() throws Exception {
+
 	}
 
 	@After
@@ -25,35 +27,35 @@ public class GridTest {
 
 	@Test
 	public void placeStreetTest() {
-		Grid grid = new Grid(5);
+
 		Street straight = new Straight();
 		Street curve = new Curve();
 		Street crossing = new Crossing();
 		Street junction = new Junction();
-		
+
 		grid.placeStreet(straight, 3, 3);
 		grid.placeStreet(curve, 2, 4);
 		grid.placeStreet(crossing, 0, 1);
 		grid.placeStreet(junction, 2, 3);
-		
-		assertEquals(grid.getStreet(3, 3).toString(),"Straight");
-		assertEquals(grid.getStreet(2, 4).toString(),"Curve");
-		assertEquals(grid.getStreet(0, 1).toString(),"Crossing");
-		assertEquals(grid.getStreet(2, 3).toString(),"Junction");
-		
-		
+
+		assertEquals(grid.getStreet(3, 3).toString(), "Straight");
+		assertEquals(grid.getStreet(2, 4).toString(), "Curve");
+		assertEquals(grid.getStreet(0, 1).toString(), "Crossing");
+		assertEquals(grid.getStreet(2, 3).toString(), "Junction");
 	}
+
+	@Test
+	public void hasStreets() {
+		placeStreetTest();
+		assertTrue(grid != null);
+
+	}
+
 	@Test
 	public void removeStreetTest() {
-		Grid grid = new Grid(5);
 		grid.removeItem(2, 4);
-		
 		assertEquals(grid.getStreet(2, 4), null);
-		
-		
-		
-		
+
 	}
-	
 
 }

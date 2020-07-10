@@ -52,6 +52,7 @@ public class TriggerPoints {
 
 		return directions.get(random.nextInt(directions.size()));
 
+
 	}
 
 	public boolean isTriggered(Vehicle car, int x, int y) {

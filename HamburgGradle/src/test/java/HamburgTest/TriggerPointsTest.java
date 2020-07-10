@@ -12,7 +12,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import business.components.Direction;
+import business.components.Straight;
 import business.components.Street;
+import business.components.TriggerPoints;
+import business.components.Vehicle;
+import business.simulation.Grid;
 
 public class TriggerPointsTest {
 	
@@ -27,7 +31,14 @@ public class TriggerPointsTest {
 	Point upLeft = new Point(33, 33);
 	
 	List<Direction> directions = new ArrayList<>();
+	TriggerPoints triggerPoints = new TriggerPoints();
+	Grid grid = new Grid(5);
+	Vehicle car = new Vehicle(3, 3, grid);
 
+	int x = 10;
+	int y = 67;
+	Point currentPoint = new Point(x % 100, y % 100);
+	
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -37,13 +48,32 @@ public class TriggerPointsTest {
 	}
 
 	@Test
-	public void chooseRandomDirectionTest() {
+	public void isTriggeredTest() {
 	
-		Random random = new Random();
-		Street street;
-		Direction direction;
+		triggerPoints.isTriggered(car, x, y);
 		
-		//assertEquals(random.nextInt(directions.size()), direction );
+		assertTrue(currentPoint.equals(triggerWest));
+	}
+	
+	@Test
+	public void canTurnToTest() {
+		int x = 33;
+		int y = 67;
+		Point carPoint = new Point(x % 100, y % 100);
+		
+		assertEquals(Direction.RIGHT, car.getDirection());
+		assertEquals(downLeft, carPoint);
+		car.setDirection(Direction.DOWN);
+		
+	
 	}
 
+	
+	@Test
+	public void tellOpositeTest() {
+		assertEquals(Direction.LEFT, triggerPoints.tellOposite(Direction.RIGHT));
+		assertEquals(Direction.DOWN, triggerPoints.tellOposite(Direction.UP));
+		assertEquals(Direction.UP, triggerPoints.tellOposite(Direction.DOWN));
+		assertEquals(Direction.RIGHT, triggerPoints.tellOposite(Direction.LEFT));
+	}
 }

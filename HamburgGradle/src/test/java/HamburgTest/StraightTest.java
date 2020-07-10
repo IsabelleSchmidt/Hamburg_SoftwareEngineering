@@ -10,6 +10,7 @@ import business.components.Direction;
 import business.components.Straight;
 
 public class StraightTest {
+	Straight straight = new Straight();
 
 	@Before
 	public void setUp() throws Exception {
@@ -21,21 +22,18 @@ public class StraightTest {
 
 	@Test
 	public void rotateStraightTest() {
-		
-		Straight straight = new Straight();
-		
-		assertEquals(straight.getDirections().get(0), Direction.DOWN);
-		assertEquals(straight.getDirections().get(1), Direction.UP);
-		straight.rotate();
-		assertEquals(straight.getDirections().get(0), Direction.RIGHT);
-		assertEquals(straight.getDirections().get(1), Direction.LEFT);
-		straight.rotate();
-		assertEquals(straight.getDirections().get(0), Direction.DOWN);
-		assertEquals(straight.getDirections().get(1), Direction.UP);
-		straight.rotate();
-		assertEquals(straight.getDirections().get(0), Direction.RIGHT);
-		assertEquals(straight.getDirections().get(1), Direction.LEFT);
-	
-	}
 
+		assertEquals(straight.getDirections().get(0), Direction.DOWN);
+		assertEquals(straight.getDirections().get(1), Direction.UP);
+		straight.rotate();
+		assertEquals(straight.getDirections().get(0), Direction.RIGHT);
+		assertEquals(straight.getDirections().get(1), Direction.LEFT);
+		straight.rotate();
+		assertEquals(straight.getDirections().get(0), Direction.DOWN);
+		assertEquals(straight.getDirections().get(1), Direction.UP);
+		straight.rotate();
+		assertEquals(straight.getDirections().get(0), Direction.RIGHT);
+		assertEquals(straight.getDirections().get(1), Direction.LEFT);
+
+	}
 }

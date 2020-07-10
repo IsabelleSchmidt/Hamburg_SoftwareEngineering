@@ -12,6 +12,8 @@ import business.components.Junction;
 
 public class JunctionTest {
 
+	Junction junction = new Junction();
+
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -22,10 +24,7 @@ public class JunctionTest {
 
 	@Test
 	public void rotateJunctionTest() {
-		
-		Junction junction = new Junction();
-//		int rotationCount = 1;
-		
+
 		assertEquals(junction.getDirections().get(0), Direction.DOWN);
 		assertEquals(junction.getDirections().get(1), Direction.RIGHT);
 		assertEquals(junction.getDirections().get(2), Direction.LEFT);
