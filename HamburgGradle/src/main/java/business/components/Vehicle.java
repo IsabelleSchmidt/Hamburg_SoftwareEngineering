@@ -161,4 +161,8 @@ public class Vehicle {
 		this.directionProperty = directionProperty;
 	}
 
+	public SimpleIntegerProperty getRotationCount() {
+		return rotationCount;
+	}
+
 }

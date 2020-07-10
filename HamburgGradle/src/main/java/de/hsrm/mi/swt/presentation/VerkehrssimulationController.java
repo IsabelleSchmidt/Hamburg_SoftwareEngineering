@@ -52,6 +52,7 @@ public class VerkehrssimulationController implements Initializable {
 	private Timeline timelineTrafficLights, timelineVehicle;
 	private int playbackspeed = 5;
 	private int streetCounter;
+	private ImageView vehicleImgV;
 
 	@FXML
 	private Button loadiSimulationButton;
@@ -267,7 +268,7 @@ public class VerkehrssimulationController implements Initializable {
 
 			} else if (street.toString().contains("Curve")) {
 
-				ImageView image = new ImageView("/gerade_rot.png");
+				ImageView image = new ImageView("/kurve_rot.png");
 				image.setFitHeight(100);
 				image.setFitWidth(100);
 				image.setRotate(90 * grid.getStreet(x, y).getRotationCount().doubleValue());
@@ -279,22 +280,17 @@ public class VerkehrssimulationController implements Initializable {
 
 		case "StreetElementCar":
 
-			try {
-				inputstream = new FileInputStream("smallcar.png");
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-				System.out.println("Autobild laden fehlgeschlagen");
-			}
-
-			Image image = new Image(inputstream);
-			ImageView vehicleImgV = new ImageView(image);
-
+			vehicleImgV = new ImageView("/smallcar.png");
 			simulationGrid.getChildren().add(vehicleImgV);
 			Vehicle v = new Vehicle(x * 100, y * 100, grid);
+
 			vehicleImgV.setOnMouseClicked(e -> {
 
 				if (e.getButton() == MouseButton.PRIMARY) {
+
 					v.rotate();
+					vehicleImgV.setRotate(90 * v.getRotationCount().get());
+
 				}
 			});
 
@@ -345,7 +341,7 @@ public class VerkehrssimulationController implements Initializable {
 
 	}
 
-	//TODO: Braucht man dich noch?
+	// TODO: Braucht man dich noch?
 	private void initStreetListener(Street street) {
 
 		street.getRotationCount().addListener((observable, oldValue, newV) -> {
@@ -358,7 +354,6 @@ public class VerkehrssimulationController implements Initializable {
 	void onMouseClickedGrid(MouseEvent event) {
 
 		ImageView img = (ImageView) event.getPickResult().getIntersectedNode();
-
 
 		Integer cIndex = GridPane.getColumnIndex(img);
 		Integer rIndex = GridPane.getRowIndex(img);
@@ -506,6 +501,26 @@ public class VerkehrssimulationController implements Initializable {
 				if (trigger.canTurnTo(car) == car.getNextDirection()) {
 
 					car.setDirection(car.getNextDirection());
+					
+					switch (car.getDirection()) {
+					case RIGHT:
+						vehicles.get(car).setRotate(0);
+						break;
+					case DOWN:
+						vehicles.get(car).setRotate(90);
+						break;
+					case LEFT:
+						vehicles.get(car).setRotate(180);
+						break;
+					case UP:
+						vehicles.get(car).setRotate(270);
+						break;
+
+					default:
+						break;
+					}
+
+					
 
 				}
 
@@ -533,8 +548,8 @@ public class VerkehrssimulationController implements Initializable {
 						for (Trafficlight t : grid.getStreet(x, y).getTrafficlights()) {
 
 							t.switchLight();
-							
-							//TODO: Fehler in der Junction Grafik, steht bei Grün, fährt bei Rot
+
+							// TODO: Fehler in der Junction Grafik, steht bei Grün, fährt bei Rot
 
 							Street street = grid.getStreet(x, y);
 
