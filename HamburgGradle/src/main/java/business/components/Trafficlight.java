@@ -130,7 +130,7 @@ public class Trafficlight {
 			}
 
 			if (street.toString().contains(("Crossing"))) {
-				image = new ImageView("/kreuzung_gelb.jpeg");
+				image = new ImageView("/kreuzung_gelb.png");
 				image.setFitHeight(100);
 				image.setFitWidth(100);
 			}

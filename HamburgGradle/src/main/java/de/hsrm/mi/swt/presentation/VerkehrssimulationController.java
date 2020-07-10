@@ -1,5 +1,6 @@
 package de.hsrm.mi.swt.presentation;
 
+import java.awt.Point;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -388,6 +389,8 @@ public class VerkehrssimulationController implements Initializable {
 	@FXML
 	void backToMenu(ActionEvent event) {
 		scrollToMenu();
+		timelineTrafficLights.stop();
+		timelineVehicle.stop();
 	}
 
 	@FXML
@@ -412,7 +415,7 @@ public class VerkehrssimulationController implements Initializable {
 			timelineVehicle.setRate(playbackspeed);
 			timelineVehicle.play();
 			timelineTrafficLights.stop();
-			timelineTrafficLights.setRate(playbackspeed);
+			timelineTrafficLights.setRate(playbackspeed / 2);
 			timelineTrafficLights.play();
 			showInfoLabelThree.setText("Abspielgeschwindkeit: " + playbackspeed);
 		}
@@ -428,7 +431,7 @@ public class VerkehrssimulationController implements Initializable {
 			timelineVehicle.setRate(playbackspeed);
 			timelineVehicle.play();
 			timelineTrafficLights.stop();
-			timelineTrafficLights.setRate(playbackspeed);
+			timelineTrafficLights.setRate(playbackspeed / 2);
 			timelineTrafficLights.play();
 			showInfoLabelThree.setText("Abspielgeschwindkeit: " + playbackspeed);
 		}
@@ -484,6 +487,12 @@ public class VerkehrssimulationController implements Initializable {
 				int x = car.getXPosition();
 				int y = car.getYPosition();
 
+				if (collisionCheck(vehicles.get(car), car.getDirection())) {
+					drive = false; // kollision nur in direktion checken
+				} else {
+					drive = true;
+				}
+
 				if (trigger.isTriggered(car, x, y)) {
 					car.setNextDirection(
 							trigger.chooseRandomDirection(grid.getStreet(x / 100, y / 100), car.getDirection()));
@@ -501,7 +510,7 @@ public class VerkehrssimulationController implements Initializable {
 				if (trigger.canTurnTo(car) == car.getNextDirection()) {
 
 					car.setDirection(car.getNextDirection());
-					
+
 					switch (car.getDirection()) {
 					case RIGHT:
 						vehicles.get(car).setRotate(0);
@@ -519,8 +528,6 @@ public class VerkehrssimulationController implements Initializable {
 					default:
 						break;
 					}
-
-					
 
 				}
 
@@ -548,8 +555,6 @@ public class VerkehrssimulationController implements Initializable {
 						for (Trafficlight t : grid.getStreet(x, y).getTrafficlights()) {
 
 							t.switchLight();
-
-							// TODO: Fehler in der Junction Grafik, steht bei Grün, fährt bei Rot
 
 							Street street = grid.getStreet(x, y);
 
@@ -603,6 +608,57 @@ public class VerkehrssimulationController implements Initializable {
 		StreetElementStraight.setDisable(true);
 		StreetElementTrafficLight.setDisable(true);
 
+	}
+
+	private boolean collisionCheck(ImageView carImg, Direction carDirection) {
+
+		boolean collisionDetected = false;
+
+		for (Vehicle v : vehicles.keySet()) {
+
+			if (carDirection.equals(Direction.DOWN)) {
+				if (!carImg.equals(vehicles.get(v))) {
+					if (carImg.getBoundsInParent().intersects(v.getXCarProperty().get(), v.getYCarProperty().get() - 20,
+							carImg.getFitHeight(), carImg.getFitWidth() / 2)) {
+
+						collisionDetected = true;
+					}
+				}
+			}
+
+			if (carDirection.equals(Direction.UP)) {
+				if (!carImg.equals(vehicles.get(v))) {
+					if (carImg.getBoundsInParent().intersects(v.getXCarProperty().get(), v.getYCarProperty().get() + 20,
+							carImg.getFitHeight() / 2, 0)) {
+
+						collisionDetected = true;
+					}
+				}
+			}
+
+			if (carDirection.equals(Direction.LEFT)) {
+				if (!carImg.equals(vehicles.get(v))) {
+					if (carImg.getBoundsInParent().intersects(v.getXCarProperty().get() + 20, v.getYCarProperty().get(),
+							carImg.getFitHeight() / 2, 0)) {
+
+						collisionDetected = true;
+					}
+				}
+			}
+			if (carDirection.equals(Direction.RIGHT)) {
+				if (!carImg.equals(vehicles.get(v))) {
+					if (carImg.getBoundsInParent().intersects(v.getXCarProperty().get() - 20, v.getYCarProperty().get(),
+							carImg.getFitHeight() / 2, carImg.getFitWidth())) {
+
+						collisionDetected = true;
+					}
+				}
+			}
+
+//wichtig
+
+		}
+		return collisionDetected;
 	}
 
 	public void scrollToMenu() {

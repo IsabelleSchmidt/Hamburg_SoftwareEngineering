@@ -164,5 +164,7 @@ public class Vehicle {
 	public SimpleIntegerProperty getRotationCount() {
 		return rotationCount;
 	}
+	
+	
 
 }
