@@ -404,6 +404,11 @@ public class VerkehrssimulationController implements Initializable {
 		StreetElementJunction.setDisable(false);
 		StreetElementStraight.setDisable(false);
 		StreetElementTrafficLight.setDisable(false);
+		
+		controllButtonStart.setDisable(false);
+		controllButtonDrecease.setDisable(true);
+		controllButtonIncrease.setDisable(true);
+		controllButtonStop.setDisable(true);
 	}
 
 	@FXML
@@ -493,18 +498,28 @@ public class VerkehrssimulationController implements Initializable {
 					drive = true;
 				}
 
-				if (trigger.isTriggered(car, x, y)) {
-					car.setNextDirection(
-							trigger.chooseRandomDirection(grid.getStreet(x / 100, y / 100), car.getDirection()));
+				try {
 
-					for (Trafficlight t : grid.getStreet(x / 100, y / 100).getTrafficlights()) {
+					if (trigger.isTriggered(car, x, y)) {
+						car.setNextDirection(
+								trigger.chooseRandomDirection(grid.getStreet(x / 100, y / 100), car.getDirection()));
 
-						if (t.getDirection().equals(car.tellOposite(car.getDirection()))) {
-							if (!(t.getStatus().get() == TrafficlightStatus.GREEN)) {
-								drive = false;
+						for (Trafficlight t : grid.getStreet(x / 100, y / 100).getTrafficlights()) {
+
+							if (t.getDirection().equals(car.tellOposite(car.getDirection()))) {
+								if (!(t.getStatus().get() == TrafficlightStatus.GREEN)) {
+									drive = false;
+								}
 							}
 						}
 					}
+				}
+
+				catch (Exception e) {
+
+					car.setDirection(trigger.tellOposite(car.getDirection()));
+					//Abfangen
+
 				}
 
 				if (trigger.canTurnTo(car) == car.getNextDirection()) {
@@ -600,6 +615,7 @@ public class VerkehrssimulationController implements Initializable {
 		controllButtonIncrease.setDisable(false);
 		controllButtonDrecease.setDisable(false);
 		controllButtonStop.setDisable(false);
+		controllButtonStart.setDisable(true);
 
 		StreetElementCar.setDisable(true);
 		StreetElementCrossing.setDisable(true);
