@@ -16,7 +16,6 @@ import business.components.TrafficlightStatus;
 import business.components.TriggerPoints;
 import business.components.Vehicle;
 import business.simulation.Grid;
-import business.simulation.turnPactException;
 import javafx.animation.KeyFrame;
 import javafx.animation.ParallelTransition;
 import javafx.animation.Timeline;
@@ -187,7 +186,7 @@ public class VerkehrssimulationController implements Initializable {
 
 		Integer cIndex = GridPane.getColumnIndex(node);
 		Integer rIndex = GridPane.getRowIndex(node);
-		
+
 		int x = cIndex == null ? 0 : cIndex;
 		int y = rIndex == null ? 0 : rIndex;
 
@@ -328,41 +327,39 @@ public class VerkehrssimulationController implements Initializable {
 
 	@FXML
 	void onMouseClickedGrid(MouseEvent event) {
-		
+
 		try {
-			
-		
 
-		ImageView img = (ImageView) event.getPickResult().getIntersectedNode();
+			ImageView img = (ImageView) event.getPickResult().getIntersectedNode();
 
-		Integer cIndex = GridPane.getColumnIndex(img);
-		Integer rIndex = GridPane.getRowIndex(img);
-		int x = cIndex == null ? 0 : cIndex;
-		int y = rIndex == null ? 0 : rIndex;
+			Integer cIndex = GridPane.getColumnIndex(img);
+			Integer rIndex = GridPane.getRowIndex(img);
+			int x = cIndex == null ? 0 : cIndex;
+			int y = rIndex == null ? 0 : rIndex;
 
-		if (event.getButton() == MouseButton.PRIMARY) {
+			if (event.getButton() == MouseButton.PRIMARY) {
 
-			Street street = grid.getStreet(x, y);
+				Street street = grid.getStreet(x, y);
 
-			if (street.getClass().toString().contains("Straight")) {
-				((Straight) street).rotate();
-			} else if (street.getClass().toString().contains("Curve")) {
-				((Curve) street).rotate();
-			} else if (street.getClass().toString().contains("Junction")) {
-				((Junction) street).rotate();
-			} else if (street.getClass().toString().contains("Crossing")) {
-				((Crossing) street).rotate();
+				if (street.getClass().toString().contains("Straight")) {
+					((Straight) street).rotate();
+				} else if (street.getClass().toString().contains("Curve")) {
+					((Curve) street).rotate();
+				} else if (street.getClass().toString().contains("Junction")) {
+					((Junction) street).rotate();
+				} else if (street.getClass().toString().contains("Crossing")) {
+					((Crossing) street).rotate();
+				}
+
+				img.setRotate(90 * street.getRotationCount().get());
 			}
 
-			img.setRotate(90 * street.getRotationCount().get());
-		}
+			if (event.getButton() == MouseButton.SECONDARY) {
 
-		if (event.getButton() == MouseButton.SECONDARY) {
+				grid.removeItem(x, y);
+				img.setImage(null);
+			}
 
-			grid.removeItem(x, y);
-			img.setImage(null);
-		}
-		
 		} catch (Exception e) {
 			System.out.println("Nur abgerutscht beim Klicken. Kann mal vorkommen.");
 		}
@@ -448,7 +445,7 @@ public class VerkehrssimulationController implements Initializable {
 		alert.setTitle("Bedienungsanleitung");
 		alert.setHeaderText("Das Programm ist wie folgt zu Benutzen:");
 		alert.setContentText(
-				"Elemente per Drag and Drop platzieren und per linkem Mausklick drehen. Elemente mit Rechsklick entfernen. Wenn alle Elemente platziert, dann Start druecken.");
+				"Elemente per Drag and Drop platzieren und per linkem Mausklick drehen. Elemente mit Rechsklick entfernen. Wenn alle Elemente platziert, dann Start druecken. Sollten sich die Autos mal festfahren, den Stau einfach durch anklicken eines Autos lösen");
 		alert.showAndWait();
 	}
 
@@ -467,9 +464,6 @@ public class VerkehrssimulationController implements Initializable {
 
 				if (collisionCheck(vehicles.get(car), car.getDirection())) {
 					drive = false;
-					
-					//TODO: Exeption bei Abbiegepackt
-					
 				} else {
 					drive = true;
 				}
@@ -535,7 +529,7 @@ public class VerkehrssimulationController implements Initializable {
 
 		timelineVehicle.play();
 
-		Duration durationTrafficLight = Duration.millis(3000);
+		Duration durationTrafficLight = Duration.millis(5000);
 		KeyFrame trafficLightFrame = new KeyFrame(durationTrafficLight, e -> {
 
 			ImageView newStreetImg = null;
@@ -610,7 +604,7 @@ public class VerkehrssimulationController implements Initializable {
 
 			if (carDirection.equals(Direction.DOWN)) {
 				if (!carImg.equals(vehicles.get(v))) {
-					if (carImg.getBoundsInParent().intersects(v.getXCarProperty().get(), v.getYCarProperty().get() - 15,
+					if (carImg.getBoundsInParent().intersects(v.getXCarProperty().get(), v.getYCarProperty().get() - 18,
 							carImg.getFitHeight(), carImg.getFitWidth() / 2)) {
 
 						collisionDetected = true;
@@ -620,7 +614,7 @@ public class VerkehrssimulationController implements Initializable {
 
 			if (carDirection.equals(Direction.UP)) {
 				if (!carImg.equals(vehicles.get(v))) {
-					if (carImg.getBoundsInParent().intersects(v.getXCarProperty().get(), v.getYCarProperty().get() + 15,
+					if (carImg.getBoundsInParent().intersects(v.getXCarProperty().get(), v.getYCarProperty().get() + 18,
 							carImg.getFitHeight() / 2, 0)) {
 
 						collisionDetected = true;
@@ -689,7 +683,7 @@ public class VerkehrssimulationController implements Initializable {
 		controllButtonIncrease.setDisable(true);
 		controllButtonDrecease.setDisable(true);
 		controllButtonStop.setDisable(true);
-		
+
 	}
 
 }
